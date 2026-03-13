@@ -1,0 +1,25 @@
+# MATLAB backup and autosave files
+*.asv
+*.m~
+*.mat
+*.mlx~
+*.fig
+*.slxc
+*.mlappinstall
+*.mlpkginstall
+*.mex*
+
+# Simulink cache and build artifacts
+slprj/
+simulink.cache/
+slxc/
+*_slwrap.*
+*_rtw/
+
+# Generated code
+codegen/
+*_mex.*
+
+# Hidden system files
+.DS_Store
+Thumbs.db
