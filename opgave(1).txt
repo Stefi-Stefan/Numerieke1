@@ -1,0 +1,229 @@
+
+Numerieke benadering met toepassing in datawetenschappen Practicum 1
+Klaas Willems Academiejaar 2025-2026
+
+1 Bivariate veeltermbenadering
+In deze opgave benaderen we een oppervlak waarvan de functiewaarden gegeven zijn op een regelmatig rechthoekig puntenrooster. Met andere woorden, we kennen een aantal functiewaarden fij overeenkomstig met de roosterpunten (xi, yj), i = 1, . . . , N en j = 1, . . . , M . We zullen deze data op twee manieren voorstellen: de kolomvector f ? RNM is gegeven door
+f = [f	· · ·	f	f	· · ·	f	· · ·	f	· · ·	f	 ? ,
+waarbij (·)? de transpose voorstelt en de matrix F ? RM×N is gegeven door
+f11	f21	· · ·	fN 1 f12	f22	· · ·	fN 2
+F = ?	? .	(1)
+f1M	f2M	· · ·	fNM
+De relatie tussen deze twee voorstellingen wordt gegeven door de operatie vec : RM×N ? RNM , gedefinieerd door
+vec(F ) = f . Als benaderende functie gebruiken we een bivariate veelterm z(x, y) gegeven door
+n	m
+z(x, y) =     cklPk(x)Pl(y),	(2)
+k=0 l=0
+waar Pk(x) en Pl(y) de legendreveeltermen voorstellen. We gebruiken dus de basis
+{?kl(x, y) : 0 = k = n, 0 = l = m}
+met ?kl(x, y) = pk(x)ql(y) waarbij pk(x) = Pk(x) en ql(y) = Pl(y). De parameters n en m geven de maximale toegelaten graad in x en y respectievelijk. We bepalen de coe¨fficie¨nten ckl, k = 0, . . . , n en l = 0, . . . , m zodat de benadering (2) de uitdrukking
+N  M
+
+
+
+minimaliseert.
+
+     (fij - z(xi, yj))2	(3)
+i=1 j=1
+
+Voor deze opgave zullen we gebruik maken van het kroneckerproduct. Dit wordt genoteerd als de binaire operatie '?' en wordt gedefinieerd als volgt. Het kroneckerproduct van twee matrices A ? Rs×t en B ? Ru×v is de blokmatrix
+?a11B	· · ·	a1tB?
+
+A ? B = ??  .
+
+. . .	.
+
+?? ? Rsu×tv
+
+as1B	· · ·	astB
+waarbij aij het element van A op de i-de rij en de j-de kolom voorstelt. Aan de hand van het kroneckerproduct kan het benaderingsprobleem (3) geherformuleerd worden als volgt: vind de vector c ? R(n+1)(m+1), uitgedrukt als
+c = [c00	· · ·	c0m	c10	· · ·	c1m	· · ·	cn0	· · ·	cnm ? ,
+
+zodat
+
+waarbij G = A ? B met
+
+
+c = arg min?Gc - f ?2
+
+
+(4)
+
+? p0(x1)	p1(x1)	· · ·	pn(x1) ?	? q0(y1)	q1(y1)	· · ·	qm(y1) ?
+p0(x2)	p1(x2)	· · ·	pn(x2)	q0(y2)	q1(y2)	· · ·	qm(y2)
+A = ?	? , B = ?	? .	(5)
+p0(xN )  p1(xN )  · · ·	pn(xN )	q0(yM )  q1(yM )  · · ·	qm(yM )
+
+1.1 Opgave
+Opgave 1. Toon aan dat het benaderingsprobeem (3) en het minimalisatieprobleem (4) equivalent zijn.
+
+Opgave 2. Bewijs nu dat de oplossing van het benaderingsprobeem (3) gegeven wordt door c = vec(B+F (A+)?), waarbij superscript-+ de pseudo-inverse voorstelt. Maak gebruik van de eigenshap (A ? B)vec(F ) = vec(BFA?). Leg uit hoe je te werk gaat.
+Tip: Toon eerst aan dat (A ? B)+ gelijk is aan A+ ? B+ aan de hand van elementaire eigenschappen van het kronecker- product [1].
+
+Opgave 3.  Implementeer in MATLAB de functie function A = get leg mtx(x, n), die gegeven de vector x ? RN en maximale graad n, de vandermondematrix A uit (5) maakt. Gebruik hiervoor de recursiebetrekking voor legendreveeltermen.
+
+Opgave 4. Implementeer in MATLAB de functie function C = kkb(x,y,F,n,m), die het kleinstekwadraten- probleem (4) oplost, gegeven
+• de rijvector met x-waarden x = [x1	. . .  xN 
+• de rijvector met y-waarden y = [y1	. . .  yM 
+• de matrix F , zie (1);
+• de maximale toegelaten graad n en m in x en y.
+
+Het resultaat is de matrix C = B+F (A+)?. Los het overgedetermineerd stelsel op met de backslashoperator van Matlab1. Bedenk een test waarmee je de correctheid van je code kan testen2.
+
+Opgave 5. We benaderen twee verschillende datasets op eenzelfde rooster. Gebruik N = M = 31 en het commando linspace om de vectoren x en y met equidistante x- en y-waarden te genereren op het interval [-1, 1]. Het commando [X,Y] = meshgrid(x,y) geeft een verzameling equidistante roosterpunten op het vierkant [0, 1] × [0, 1]. De twee datasets zijn:
+
+1. fij gegeven door fij = exp(1 - (2.5xi)2 - (2yj)2).
+2. Datapunten op de 'Matlabfunctie'3. Gebruik daarvoor het Matlabcommando membrane: F = membrane(1,15).
+
+    1De backslash operator in Matlab berekent voor een overgedetermineerd stelsel de pseudo-inverse: P = Q+R kan berekend worden door P = Q\R
+2Een voorbeeld van een correctheidstest: Je kan je functie toepassen op een voorbeeld waarvoor je de oplossing kent. Je legt dan uit waarom het
+gekozen voorbeeld representatief is.
+3De functie op het logo van Matlab is een eigenfunctie van de golfvergelijking op een L-vormig domein.
+
+Gebruik de commando's scatter3 en surf om de datapunten te plotten samen met het benaderende oppervlak op dezelfde figuur. Voeg per dataset zo'n figuur toe aan het verslag. Gebruik daarvoor n = m = 7. Hint: voor het kroneckerproduct gebruik je het commando kron.
+Opgave 6. Plot het verloop van de kostfunctie (3) voor n = m = 1, . . . , 20 voor de twee datasets op dezelfde figuur. Bespreek kort het gedrag van de grafieken. Voor welke dataset is een veeltermoppervlak een geschikte benadering? Voor welke niet, en waarom? Gebruik kwantitatieve argumenten. Hoe zou je de Matlabfuntie beter kunnen benaderen?
+
+Opgave 7. De ASTER Global Digital Elevation Map is een product van METI en NASA en brengt het zeeniveau van de hele wereld in kaart onder de vorm van discrete hoogtegegevens op een regulier rooster. Het bestand matterhorn.png dat je op Toledo kan vinden4 bevat een deel van deze kaart, namelijk een rechthoekig domein rond de Matterhorn5. Elke pixel van de afbeelding bevat een hoogtewaarde. Je kan de data inlezen in Matlab als een matrix F via het commando F
+= double(imread('matterhorn.png'));. Gebruik de code uit de vorige opgaven om een veeltermbenadering te maken van de Matterhorn. Normaliseren we het rooster dan kunnen we opnieuw werken met
+x = linspace(-1,1,N);
+y = linspace(-1,1,M);
+waarbij N en M de gepaste waarden hebben (overeenkomstig met de datamatrix). Na opnieuw het commando [X,Y] = meshgrid(x,y) uit te voeren, kan je de data op een mooie manier weergeven met
+surf(X,Y,F,'EdgeColor','none','LineStyle','none','FaceLighting','phong')
+xlim([-1,1]); ylim([-1,1]); zlim([0, 250]); title('Matterhorn')
+en met imagesc(F) (dit geeft een bovenaanzicht). Doe hetzelfde voor het benaderende veeltermoppervlak met n =
+m = 25 en voeg de resultaten toe aan het verslag. Voeg ook een contourplot toe aan je verslag, zowel van de oorspronke- lijke data als van de veeltermbenadering (dit kan via contourf).
+
+
+2 Kleinstekwadratenbenadering met splinefuncties
+2.1 Achtergrond
+Wij gebruiken in dit deel van het practicum kubische splines om een kleinstekwadratenbenadering van een gegeven functie te vinden, waarbij we vertrekken van R functie-evaluaties f1, . . . fR in de (verschillende) punten x1, . . . , xR. We stellen die spline met n + 2k + 1 knooppunten t-k, . . . , t0, . . . , tn, . . . tk voor in de B-splinevoorstelling:
+
+
+
+s(x) =
+
+n-1
+ciNi,k+1(x) ,	(6)
+i=-k
+
+met Ni,k+1(x) de genormaliseerde B-spline van graad k. Voor het vinden van de benadering lossen we het overgedeter- mineerde stelsel op
+Mc = f .	(7)
+De matrix M is een R × (n + k)-matrix waarvan rij r de functiewaarden Ni,k+1(xr) bevat, met i = -k, . . . , n - 1. Het rechterlid f is een kolomvector met de waarden fr; de onbekende vector c bevat de coefficie¨nten van de kleinstekwadra- tenbenadering s(x).
+De berekening van de matrixelementen van M kan efficie¨nt gebeuren via de recursiebetrekking:
+
+
+Ni,k+1
+
+ x - ti 
+(x) =	N
+ti+k - ti
+
+
+
+i,k
+
+ ti+k+1 - x
+(x) +
+ti+k+1 - ti+1
+
+
+Ni+1,k
+
+
+(x) .	(8)
+
+Dit is dezelfde recursiebetrekking die de basis vormt voor het algoritme van de Boor voor de evaluatie van s(x). Aan de hand van vergelijking (8) kan men de volgende tabel opstellen. Je vindt daar in de i-de kolom de functiewaarden terug
+
+4De	data	is	publiek	verkrijgbaar	(op	voorwaarde	van	de	aanmaak	van	een	gratis	account)	via	de	website
+https://appeears.earthdatacloud.nasa.gov/.
+5Of voor de chocoladeliefhebber: de Tobleroneberg
+
+van alle B-splines van graad i - 1 die verschillend zijn van nul in het punt x:
+
+Nj-k,k+1(x) Nj-k+1,k+1(x) Nj-k+2,k+1(x)
+.
+Nj-2,3(x)  . . .	Nj-2,k+1(x)
+Nj-1,2(x)  Nj-1,3(x)  . . .	Nj-1,k+1(x)
+Nj,1(x) = 1	Nj,2(x)	Nj,3(x)	. . .	Nj,k+1(x)
+
+2.2 Opgave
+Opgave 8. Het algoritme van de Boor evalueert een functie die gegeven wordt door zijn coe¨fficie¨nten in een B-splinebasis. Bestudeer de gegeven implementatie van dit algoritme. Schrijf vervolgens een Matlabscript om, gegeven een knooppun- tenrij en de graad k, de volledige splinebasis te visualiseren in het interval [0, 1]. Je mag de knooppuntenrij zelf kiezen, maar geef duidelijk aan welke keuze je maakt.
+
+Opgave 9. Ontwikkel een efficie¨nte Matlab-functie die een kleinstekwadratenbenadering opstelt (de coe¨fficie¨nten bepaalt) en vervolgens evalueert in opgegeven punten. Enkele richtlijnen:
+
+• Gebruik voor de evaluatie van alle B-splines in een punt het algoritme dat in Sectie 2.1 van deze opgave gesugge- reerd wordt, op basis van de recursiebetrekking.
+• Voor het oplossen van het stelsel (7) mag je gebruik maken van de ingebouwde \ operator van Matlab. Die berekent automatisch een kleinste-kwadratenoplossing van een overgedetermineerd stelsel.
+• Voor de evaluatie van de gevonden kleinstekwadratenbenadering maak je gebruik van het algoritme van de Boor.
+• De signatuur van je functie ziet er als volgt uit: function Z = kkb spline(t, x, f, xplot). Deze functie krijgt als invoer:
+- een kolomvector t van lengte n +2k +1 die de knooppuntenrij voorstelt. Je mag die knooppunten zelf kiezen.
+- een kolomvector x van lengte R die de abscissen bevat waarin de gegeven functie f wordt gee¨valueerd.
+- een kolomvector f van lengte R, die de functiewaarden horende bij x bevat.
+- een rijvector xplot van lengte N die de punten bevat waarin we de splinefunctie willen evalueren.
+Als uitvoer geeft de functie een rijvector Z terug met functiewaarden in de punten xplot.
+
+Welke tests heb je uitgevoerd om de correctheid van je code te garanderen? Illustreer die correcte werking van je code.
+
+Opgave 10. Gebruik de functie uit de vorige opgave om meetgegevens te fitten, zie Figuur 1. Gebruik daarvoor de knooppuntenrij t1 and t2. De meetgegevens en knooppuntenrijen zijn opgeslagen in exercise10.mat. Gebruik het Matlabcommando load om de data in je Matlabworkspace beschikbaar te maken. Welke knooppuntenrij geeft de beste benadering? Waarom?
+
+Opgave 11. Plot voor e´e´n van de twee knooppuntenrijen uit de vorige oefening de structuur van de matrix M (7) met het commando spy. Bespreek en verklaar de structuur van de matrix. Hoe zou je de QR-decompositie van deze matrix efficient kunnen berekenen?
+
+Opgave 12. Waarom gebruikt men in de praktijk B-splines als basisfuncties voor splinebenaderingen, in plaats van bijvoorbeeld, afgeknotte machtsfuncties?
+
+0.7
+
+
+
+0.6
+
+
+
+0.5
+
+
+
+0.4
+
+
+
+0.3
+
+
+
+0.2
+
+
+
+0.1
+0	0.1	0.2	0.3	0.4	0.5	0.6	0.7	0.8	0.9	1
+x
+
+3 Praktische zaken
+
+Figuur 1: De gegeven meetpunten.
+
+
+• Het practicum wordt bij voorkeur gemaakt in groepjes van twee. Je kan het forum op Toledo gebruiken om een part- ner voor het practicum te vinden. Indien je het practicum alleen wilt maken, hoef je enkel de volgende opdrachten te maken: opdracht 1 tot en met 5 en opdracht 9 tot en met 11.
+• Het verslag, evenals de code wordt onder volgende vorm door (exact) e´e´n van de leden ingediend:
+- Alles in een zip-bestand met als naam NaamGroepslid1NaamGroepslid2.zip. (bv. WimMichielsGiovanniSamaey.zip)
+- Het verslag is een pdf-bestand met als naam NaamGroepslid1NaamGroepslid2.pdf.
+- Het verslag is maximaal negen paginas.
+- Volgende m-bestanden: get leg mtx.m, kkb.m, opdracht5.m, opdracht6.m, opdracht7.m, opdracht8.m, kkb spline.m,
+opdracht10.m en opdracht11.m, alsook eventuele hulpbestanden die nodig zijn om de code te runnen.
+De deadline is woensdag 8 april 2026, 23u59. Op Toledo zal je een indienlink vinden.
+• Hou er rekening mee dat tijdens de beoordeling volgende zaken gequoteerd worden:
+- Bestanden dragen de juiste naam (zie hierboven).
+- De kwaliteit van de code: je zorgt dat de code leesbaar is (bv. indent een for-loop, geef je variabelen logische namen, geen overbodige bewerkingen . . . ). De functieheaders voor kkb, kkb spline en get leg mtx worden tot op de letter gevolgd.
+- De inhoudelijke kwaliteit van je antwoorden.
+- De kwaliteit van je verslag. Zorg dat je een net en leesbaar verslag indient. Enkele zaken waar je rekening mee dient te houden:
+* Je hoeft geen inleiding/conclusie te schrijven. Je verslag mag gerust uit "onafhankelijke" paragrafen bestaan die op de verschillende opdrachten antwoord bieden.
+* Je notatie is consistent met die gebruikt in de opgave.
+* Je schrijft in volzinnen. Een afleiding met formules wordt bijv. voorafgegaan door (minstens) e´e´n inlei- dende volzin.
+* Figuren zijn kwalitatief. Je denkt na over je assen (logaritmisch, lineair). Je voegt een legende toe. Assen hebben een label. Dit punt is essentieel. Wetenschappelijke communicatie aan de hand van gebrekkige figuren is waardeloze communicatie.
+* Exporteer figuren bij voorkeur als eps-figuren, of png-figuren van voldoende hoge kwaliteit.
+Klaas Willems (200A 03.09)
+klaas.willems@kuleuven.be
+
+Referenties
+[1] Taboga,	Marco	(2021).	Properties	of	the	Kronecker	product,	Lectures	on	matrix	algebra. https://www.statlect.com/matrix-algebra/Kronecker-product-properties.
+
+
