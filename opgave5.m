@@ -35,14 +35,13 @@ Z1 = B * C1 * A'; %in opgave stond hint over kron, wij hebben geen kron
 %view(45,30);
 
 figure;
-datapoints = scatter3(X(:), Y(:), F1(:), 12, 'k', 'filled'); hold on;
+scatter3(X(:), Y(:), F1(:), 12, 'k', 'filled'); hold on;
 surf(X, Y, Z1, 'EdgeColor', 'none', 'FaceAlpha', 0.85);
 colormap turbo;
 grid on;
 xlabel('x'); ylabel('y'); zlabel('f(x,y)');
 title('Dataset 1: datapunten + veeltermbenadering (n=m=7)');
-legend(datapoints, 'Datapunten', 'Location', 'northeast');
-ylabel(colorbar, 'Hoogte van het benaderend oppervlak', 'FontSize', 11, 'Rotation', 270, 'VerticalAlignment', 'bottom');
+legend('Datapunten', 'Benaderend oppervlak', 'Location', 'northeast');
 view(45,30);
 
 %% Dataset 2: F = membrane(1,15)
@@ -62,14 +61,13 @@ Z2 = B * C2 * A';
 %view(-160,20);
 
 figure;
-datapoints = scatter3(X(:), Y(:), F2(:), 12, 'k', 'filled'); hold on;
+scatter3(X(:), Y(:), F2(:), 12, 'k', 'filled'); hold on;
 surf(X, Y, Z2, 'EdgeColor', 'none', 'FaceAlpha', 0.85);
 colormap turbo;
 grid on;
 xlabel('x'); ylabel('y'); zlabel('f(x,y)');
 title('Dataset 2 (membrane): datapunten + veeltermbenadering (n=m=7)');
-legend(datapoints, 'Datapunten', 'Location', 'northeast');
-ylabel(colorbar, 'Hoogte van het benaderend oppervlak', 'FontSize', 11, 'Rotation', 270, 'VerticalAlignment', 'bottom');
+legend('Datapunten', 'Benaderend oppervlak', 'Location', 'northeast');
 view(-160,20);
 
 %% grootte fouten
