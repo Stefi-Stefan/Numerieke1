@@ -7,7 +7,7 @@ M = 9;
 x = linspace(-1,1,N);
 y = linspace(-1,1,M);
 
-n = 3 % gr x
+n = 3; % gr x
 m = 2; % gr y
 
 % coefficientenmatrix C_true  (coefficienten vd veelterm in de
@@ -16,7 +16,7 @@ C_true = [ 1.0  -0.4   0.2   0.1;
           -0.3   0.7  -0.5   0.0;
            0.4   0.2   0.0  -0.2];
 
-% F opstellen uit de Legendrebasis met diezelfde coeff : F = B * C_true * A^T
+% F uit de Legendrebasis met diezelfde coeff : F = B * C_true * A^T
 A = get_leg_mtx(x, n);
 B = get_leg_mtx(y, m);
 F = B * C_true * A';

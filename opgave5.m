@@ -24,14 +24,25 @@ Z1 = B * C1 * A'; %in opgave stond hint over kron, wij hebben geen kron
 %z1_vec = Gamma * c1_vec;
 %Z1 = reshape(z1_vec, M, N); %vector naar matrix terug
 
+%figure;
+%scatter3(X(:), Y(:), F1(:), 12, 'k', 'filled'); hold on;
+%surf(X, Y, Z1, 'EdgeColor', 'none', 'FaceAlpha', 0.85);
+%colormap turbo;
+%grid on;
+%xlabel('x'); ylabel('y'); zlabel('f(x,y)');
+%title('Dataset 1: datapunten + veeltermbenadering (n=m=7)');
+%legend('Datapunten', 'Benaderend oppervlak', 'Location', 'northeast');
+%view(45,30);
+
 figure;
-scatter3(X(:), Y(:), F1(:), 12, 'k', 'filled'); hold on;
+datapoints = scatter3(X(:), Y(:), F1(:), 12, 'k', 'filled'); hold on;
 surf(X, Y, Z1, 'EdgeColor', 'none', 'FaceAlpha', 0.85);
 colormap turbo;
 grid on;
 xlabel('x'); ylabel('y'); zlabel('f(x,y)');
 title('Dataset 1: datapunten + veeltermbenadering (n=m=7)');
-legend('Datapunten', 'Benaderend oppervlak', 'Location', 'best');
+legend(datapoints, 'Datapunten', 'Location', 'northeast');
+ylabel(colorbar, 'Hoogte van het benaderend oppervlak', 'FontSize', 11, 'Rotation', 270, 'VerticalAlignment', 'bottom');
 view(45,30);
 
 %% Dataset 2: F = membrane(1,15)
@@ -40,14 +51,25 @@ F2 = membrane(1,15);
 C2 = kkb(x, y, F2, n, m);
 Z2 = B * C2 * A';
 
+%figure;
+%scatter3(X(:), Y(:), F2(:), 12, 'k', 'filled'); hold on;
+%surf(X, Y, Z2, 'EdgeColor', 'none', 'FaceAlpha', 0.65);
+%colormap turbo;
+%grid on;
+%xlabel('x'); ylabel('y'); zlabel('f(x,y)');
+%title('Dataset 2 (membrane): datapunten + veeltermbenadering (n=m=7)');
+%legend('Datapunten', 'Benaderend oppervlak', 'Location', 'northeast');
+%view(-160,20);
+
 figure;
-scatter3(X(:), Y(:), F2(:), 12, 'k', 'filled'); hold on;
-surf(X, Y, Z2, 'EdgeColor', 'none', 'FaceAlpha', 0.65);
+datapoints = scatter3(X(:), Y(:), F2(:), 12, 'k', 'filled'); hold on;
+surf(X, Y, Z2, 'EdgeColor', 'none', 'FaceAlpha', 0.85);
 colormap turbo;
 grid on;
 xlabel('x'); ylabel('y'); zlabel('f(x,y)');
 title('Dataset 2 (membrane): datapunten + veeltermbenadering (n=m=7)');
-legend('Datapunten', 'Benaderend oppervlak', 'Location', 'best');
+legend(datapoints, 'Datapunten', 'Location', 'northeast');
+ylabel(colorbar, 'Hoogte van het benaderend oppervlak', 'FontSize', 11, 'Rotation', 270, 'VerticalAlignment', 'bottom');
 view(-160,20);
 
 %% grootte fouten

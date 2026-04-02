@@ -19,10 +19,10 @@ y = y(:);
 A = get_leg_mtx(x, n); % dimensie N x (n+1)
 B = get_leg_mtx(y, m); % dimensie M x (m+1)
 
-%in y-richting: B * X = F dus X = B \ F geeft X = (B^+) * F
+%B * X = F dus X = B \ F geeft X = (B^+) * F
 X = B \ F;
 
-% in x-richting: A * Y = X' dus Y = A \ X' geeft Y = (A^+) * X'
+%A * Y = X' dus Y = A \ X' geeft Y = (A^+) * X'
 Y = A \ X';
 C = Y';
 
