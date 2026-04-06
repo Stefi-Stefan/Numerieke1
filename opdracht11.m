@@ -1,6 +1,7 @@
 % Opgave 11
 % Structuur van matrix M en bespreking van efficiente QR-decompositie.
 clear; clc; close all;
+tic
 
 % Laad de data van oefening 10.
 S = load('exercise10.mat');
@@ -29,62 +30,7 @@ title('Sparsity-structuur van M (opgave 11)');
 xlabel('kolomindex');
 ylabel('rijindex');
 
-% Bepaal enkele structuurmaten.
-[Rm, Cm] = size(Ms);
-nzM = nnz(Ms);
-densiteit = nzM / (Rm * Cm);
 
-rowNnz = full(sum(Ms ~= 0, 2));
-maxNnzRow = max(rowNnz);
-minNnzRow = min(rowNnz);
-
-% Benaderde bandbreedte: uiterste kolommen met niet-nul per rij.
-onderBand = 0;
-bovenBand = 0;
-for r = 1:Rm
-    cols = find(Ms(r, :));
-    if ~isempty(cols)
-        onderBand = max(onderBand, r - cols(1));
-        bovenBand = max(bovenBand, cols(end) - r);
-    end
-end
-
-fprintf('\nSTRUCTUUR VAN M\n');
-fprintf('afmetingen M: %d x %d\n', Rm, Cm);
-fprintf('aantal niet-nul elementen: %d\n', nzM);
-fprintf('densiteit: %.3f %%\n', 100*densiteit);
-fprintf('min aantal niet-nul per rij: %d\n', minNnzRow);
-fprintf('max aantal niet-nul per rij: %d\n', maxNnzRow);
-fprintf('verwacht voor kubisch: maximaal k+1 = %d niet-nul per rij\n', k+1);
-fprintf('geschatte onderband: %d\n', onderBand);
-fprintf('geschatte bovenband: %d\n', bovenBand);
-
-% QR op sparse matrix (economy).
-[Q, R] = qr(Ms, 0);
-
-figure;
-spy(R);
-title('Sparsity-structuur van R bij sparse QR van M');
-xlabel('kolomindex');
-ylabel('rijindex');
-
-fprintf('\nEFFICIENTE QR-BEREKENING\n');
-fprintf('1) M is schaars en bandvormig (door lokale steun van B-splines).\n');
-fprintf('2) Gebruik sparse QR in plaats van dense QR (bv. qr(sparse(M),0)).\n');
-fprintf('3) Werk met transformaties op f (Q''*f) zonder expliciet volledige Q op te slaan.\n');
-fprintf('4) Zo beperk je rekentijd en geheugen, zeker voor grote datasets.\n');
-
-% Optioneel: los LS op via QR en vergelijk met backslash.
-c_qr = R \ (Q' * y);
-c_bs = Ms \ y;
-relVerschil = norm(c_qr - c_bs, 2) / (norm(c_bs, 2) + eps);
-fprintf('relatief verschil tussen QR-oplossing en backslash: %.3e\n', relVerschil);
-
-% Extra tekst voor verslag.
-fprintf('\nKORTE BESPREKING VOOR HET VERSLAG\n');
-fprintf('Elke rij van M bevat slechts enkele niet-nul elementen omdat maar k+1 basisfuncties lokaal actief zijn.\n');
-fprintf('Daardoor heeft M een bandstructuur en lage densiteit, zichtbaar in spy(M).\n');
-fprintf('Een sparse QR-decompositie is daarom de aangewezen efficiente methode.\n');
 
 function M = bouwM(t, x, k)
 % Bouw matrix M met M(r,i) = N_i,k+1(x_r).
@@ -151,3 +97,4 @@ for j = 1:k
     Nloc(j+1) = saved;
 end
 end
+toc

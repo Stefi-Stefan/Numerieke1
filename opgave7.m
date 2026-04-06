@@ -51,14 +51,14 @@ xlabel('x'); ylabel('y');
 %% contour
 figure;
 subplot(1,2,1);
-contourf(X, Y, F, 25, 'LineColor', 'none');
+contourf(X, Y, F,10, 'LineColor', 'none');
 axis square;
 colorbar;
 title('contourf: originele data');
 xlabel('x'); ylabel('y');
 
 subplot(1,2,2);
-contourf(X, Y, Z, 25, 'LineColor', 'none');
+contourf(X, Y, Z,10, 'LineColor', 'none');
 axis square;
 colorbar;
 title('contourf: veeltermbenadering');
@@ -71,12 +71,12 @@ fprintf('Opgave 7 benaderd met n=m=25\n');
 fprintf('||F - Z||_F = %.3e\n', errFro);
 fprintf('Relatieve fout = %.3e\n', relErr);
 
-errKwad = (F - Z).^2;
+errAbs = abs(F - Z);
 figure;
-imagesc(x, y, flipud(errKwad));
+imagesc(x, y, flipud(errAbs));
 set(gca, 'YDir', 'normal'); 
 axis square;
 colorbar;
 colormap(hot); 
-title('Kwadratische Fout (|F - Z|.^2)');
+title('Absolute Fout abs(F - Z)');
 xlabel('x'); ylabel('y');
