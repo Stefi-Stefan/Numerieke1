@@ -49,4 +49,3 @@ fprintf('Dataset 1: K(1)=%.3e, K(20)=%.3e, verhouding K(20)/K(1)=%.3e\n', K1(1),
 fprintf('Dataset 2: K(1)=%.3e, K(20)=%.3e, verhouding K(20)/K(1)=%.3e\n', K2(1), K2(end), ratio2);
 fprintf('Dataset 1: relatieve daling van d=19 naar d=20: %.3e\n', (K1(end-1)-K1(end))/max(K1(end-1),eps));
 fprintf('Dataset 2: relatieve daling van d=19 naar d=20: %.3e\n', (K2(end-1)-K2(end))/max(K2(end-1),eps));
-    

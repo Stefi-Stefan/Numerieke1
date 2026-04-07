@@ -17,7 +17,7 @@ A = get_leg_mtx(x, n);
 B = get_leg_mtx(y, m);
 Z1 = B * C1 * A'; %in opgave stond hint over kron, wij hebben geen kron
 % gebruikt maar wel de manier van Z = B * C * A'  die we in opgave 1
-% bewezen hebben in het verslag omdat dit is veel efficienter is. met de 
+% bewezen hebben in het verslag omdat dit is veel efficienter is. met de
 % kron aanpak zou het worden:
 %Gamma = kron(A, B);
 %c1_vec = C1(:);
