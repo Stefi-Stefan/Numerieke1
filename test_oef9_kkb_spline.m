@@ -170,28 +170,28 @@ subplot(2,2,1);
 plot(xplot, f_smooth_plot, 'k-', 'LineWidth', 1.5); hold on;
 plot(xplot, Z_smooth, 'r--', 'LineWidth', 1.3); grid on;
 title('Glad: exp(x)cos(2\pix)');
-legend('waar','fit','Location','best');
+legend('waar','fit','Location','north');
 xlabel('x'); ylabel('y');
 
 subplot(2,2,2);
 plot(xplot, f_kink_plot, 'k-', 'LineWidth', 1.5); hold on;
 plot(xplot, Z_kink, 'r--', 'LineWidth', 1.3); grid on;
 title('Knik: |x-0.5|');
-legend('waar','fit','Location','best');
+legend('waar','fit','Location','north');
 xlabel('x'); ylabel('y');
 
 subplot(2,2,3);
 plot(xplot, f_osc_plot, 'k-', 'LineWidth', 1.5); hold on;
 plot(xplot, Z_osc, 'r--', 'LineWidth', 1.3); grid on;
 title('Hoge frequentie: sin(20\pix)');
-legend('waar','fit','Location','best');
+legend('waar','fit','Location','north');
 xlabel('x'); ylabel('y');
 
 subplot(2,2,4);
 plot(xplot, f_step_plot, 'k-', 'LineWidth', 1.5); hold on;
 plot(xplot, Z_step, 'r--', 'LineWidth', 1.3); grid on;
 title('Sprongfunctie');
-legend('waar','fit','Location','best');
+legend('waar','fit','Location','north');
 xlabel('x'); ylabel('y');
 %% TEST 4: randpunten x=0 en x=1
 % deze punten geven vaak problemen bij splines met herhaalde eindknopen
