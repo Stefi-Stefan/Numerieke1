@@ -1,10 +1,9 @@
 \chapter{Bivariate veeltermbenadering}
+In dit deel wordt de kleinstekwadratenbenadering van roosterdata met bivariate Legendreveeltermen uitgewerkt. De formulering in matrixvorm en de numerieke implementatie worden behandeld in opgaven~1 tot en met~7.
 
-In dit hoofdstuk wordt de kleinstekwadratenbenadering van roosterdata met bivariate Legendreveeltermen uitgewerkt. De formulering in matrixvorm en de numerieke implementatie worden behandeld in Opgaven~1 tot en met~7.
+\subsection*{Opgave 1} \label{sub:opgave1}
+\addcontentsline{toc}{subsection}{Opgave 1}
 
-\section{Formulering En Numerieke Uitwerking}
-
-\subsection*{Opgave 1} \label{sec:opgave1}
 
 Beschouw de benaderende functie
 \[
@@ -15,18 +14,17 @@ met $p_k(x)=P_k(x)$ en $q_l(y)=P_l(y)$ de Legendrebasisfuncties in respectieveli
 z(x_i,y_j)=\sum_{k=0}^{n}\sum_{l=0}^{m} c_{kl}\,p_k(x_i)q_l(y_j).
 \]
 
-Definieer de matrices
+Definieer de matrices $A\in\mathbb{R}^{N\times(n+1)}$ en $B\in\mathbb{R}^{M\times(m+1)}$ met elementen
 \[
-A_{i,k}=p_k(x_i),\quad i=1,\ldots,N,\;k=0,\ldots,n,
-\]
+A_{i,k+1}=p_k(x_i),\quad i=1,\ldots,N,\;k=0,\ldots,n,
+\] %moet +1 net zoals C
 \[
-B_{j,l}=q_l(y_j),\quad j=1,\ldots,M,\;l=0,\ldots,m,
-\]
-zodat $A\in\mathbb{R}^{N\times(n+1)}$ en $B\in\mathbb{R}^{M\times(m+1)}$. Neem daarnaast $C\in\mathbb{R}^{(m+1)\times(n+1)}$ als de co\"{e}ffici\"{e}ntenmatrix met $C_{l+1,k+1}=c_{kl}$. Dan geldt elementgewijs
+B_{j,l+1}=q_l(y_j),\quad j=1,\ldots,M,\;l=0,\ldots,m.
+\] Neem daarnaast $C\in\mathbb{R}^{(m+1)\times(n+1)}$ als de co\"{e}ffici\"{e}ntenmatrix met $C_{l+1,k+1}=c_{kl}$. Dan geldt elementgewijs
 \[
 (BCA^T)_{j,i}=\sum_ {l=0}^{m}\sum_{k=0}^{n} c_{kl}\,q_l(y_j)p_k(x_i)=z(x_i,y_j).
-\]
-Dus de benaderde roosterwaarden worden gegeven door de matrix $Z=BCA^T$.
+\] 
+Dus de benaderde roosterwaarden worden gegeven door de matrix $Z=BCA^\top$.
 
 Met $F\in\mathbb{R}^{M\times N}$ de datamatrix en $f=\mathrm{vec}(F)$ volgt voor de oorspronkelijke doelfunctie van het benaderingsprobleem:
 \[
@@ -37,88 +35,94 @@ Met $F\in\mathbb{R}^{M\times N}$ de datamatrix en $f=\mathrm{vec}(F)$ volgt voor
 
 Gebruik nu de identiteit
 \[
-\mathrm{vec}(BCA^T)=(A\otimes B)\,\mathrm{vec}(C).
+\mathrm{vec}(BCA^\top)=(A\otimes B)\,\mathrm{vec}(C).
 \]
-Definieer $c=\mathrm{vec}(C)$ en $G=A\otimes B$. Dan wordt
+Definieer $c=\mathrm{vec}(C)$ en $\Gamma=A\otimes B$. Dan wordt
 \[
 \|\mathrm{vec}(F)-\mathrm{vec}(Z)\|_2^2
-=\|f-Gc\|_2^2.
+=\|f-\Gamma c\|_2^2 = \|\Gamma c-f\|_2^2 .
 \]
 Hieruit volgt rechtstreeks dat
 \[
-\min_{\{c_{kl}\}}\sum_{i=1}^{N}\sum_{j=1}^{M}\big(f_{ij}-z(x_i,y_j)\big)^2
+\argmin_{\{c_{kl}\}}\sum_{i=1}^{N}\sum_{j=1}^{M}\big(f_{ij}-z(x_i,y_j)\big)^2
 \quad\Longleftrightarrow\quad
-\min_{c}\|Gc-f\|_2^2.
-\]
+\argmin_{c} \|\Gamma c - f\|_2^2.\]
 Hiermee is het benaderingsprobleem equivalent met het minimalisatieprobleem.
 
 
 
 \subsection*{Opgave 2}
-
+\addcontentsline{toc}{subsection}{Opgave 2}
 Uit Opgave~1 volgt dat het benaderingsprobleem herschreven kan worden als
 \[
-\min_{c}\|Gc-f\|_2^2,
-\qquad G=A\otimes B,
+\argmin_{c}\|\Gamma c-f\|_2^2,
+\qquad \Gamma=A\otimes B,
 \qquad f=\mathrm{vec}(F).
 \]
 Een kleinstekwadratenoplossing met minimale norm wordt gegeven door de pseudo-inverse:
 \[
-c=G^+f=(A\otimes B)^+\,\mathrm{vec}(F).
+c=\Gamma^+f=(A\otimes B)^+\,\mathrm{vec}(F).
 \]
 
-De gevraagde vorm volgt zodra aangetoont is dat
+De gevraagde vorm volgt zodra aangetoond is dat
 \[
 (A\otimes B)^+=A^+\otimes B^+.
 \]
 Een compacte verantwoording gebruik makend van de SVD:
 \[
-A=U_A\Sigma_A V_A^T,
+A=U_A\Sigma_A V_A^\top,
 \qquad
-B=U_B\Sigma_B V_B^T.
+B=U_B\Sigma_B V_B^\top,
 \]
-Dan geldt
+
+waarbij $U$ en $V$ orthogonale matrices zijn en $\Sigma$ een diagonaalmatrix met de singuliere waarden. Dan geldt
 \[
-A\otimes B=(U_A\otimes U_B)(\Sigma_A\otimes\Sigma_B)(V_A\otimes V_B)^T,
+A\otimes B=(U_A\Sigma_A V_A^\top) \otimes(U_B\Sigma_B V_B^\top).
 \]
-en dus, door de definitie van de pseudo-inverse op diagonale singulierewaarden,
+Door gebruik te maken van de mixed-product eigenschap van kroneckerproducten, namelijk $(XZ)\otimes(YW)=(X\otimes Y)(Z\otimes W)$, kan dit herschreven worden als:
 \[
-(A\otimes B)^+=(V_A\otimes V_B)(\Sigma_A\otimes\Sigma_B)^+(U_A\otimes U_B)^T
-=(V_A\Sigma_A^+U_A^T)\otimes(V_B\Sigma_B^+U_B^T)
+A\otimes B=(U_A\otimes U_B)(\Sigma_A\otimes\Sigma_B)(V_A\otimes V_B)^\top.
+\]
+Hierbij werd gebruik gemaakt van de eigenschap dat de getransponeerde van het kroneckerproduct gelijk is aan het kroneckerproduct van de getransponeerdes. Vervolgens zijn $U_A \otimes U_B$ en $V_A \otimes V_B$ orthogonale matrices aangezien er geldt dat:
+\[
+(U_A \otimes U_B)^\top (U_A \otimes U_B) = (U_A^\top \otimes U_B^\top) (U_A \otimes U_B) = (U_A^\top U_A) \otimes (U_B^\top U_B) = I \otimes I = I.
+\]
+Bovendien is $\Sigma_A\otimes\Sigma_B$ een diagonaalmatrix. Uit de definitie van het kroneckerproduct volgt namelijk dat de blokmatrices $(\Sigma_A)_{ij}\Sigma_B$ enkel niet-nul zijn op de hoofddiagonaal ($i=j$), waar ze het product vormen van een scalaire waarde met de diagonaalmatrix $\Sigma_B$. De bekomen uitdrukking voor $A\otimes B$ is dus een geldige SVD. Dan geldt, door de definitie van de pseudo-inverse op de SVD: 
+\[
+(A\otimes B)^+=(V_A\otimes V_B)(\Sigma_A\otimes\Sigma_B)^+(U_A\otimes U_B)^\top.
+\] 
+Er is net bewezen dat $\Sigma_A \otimes \Sigma_B$ een diagonaalmatrix is. De pseudo-inverse van een diagonaalmatrix wordt berekend door de niet-nul elementen op de diagonaal te inverteren. Die bewerking komt dus overeen met de normale inverse. Hierdoor geldt de eigenschap $(X \otimes Y)^{-1} = X^{-1} \otimes Y^{-1}$ ook voor de pseudo-inverse van deze diagonaalmatrices. Door dit toe te passen, en daarna de mixed-product eigenschap, volgt dat
+\[
+(A\otimes B)^+=(V_A\otimes V_B)(\Sigma_A^+\otimes\Sigma_B^+)
+(U_A\otimes U_B)^\top
+\]
+\[
+=(V_A\Sigma_A^+U_A^\top)\otimes(V_B\Sigma_B^+U_B^\top)
 =A^+\otimes B^+.
 \]
 Hiermee wordt
 \[
 c=(A^+\otimes B^+)\,\mathrm{vec}(F).
 \]
-
 Door de identiteit
 \[
-(X\otimes Y)\,\mathrm{vec}(M)=\mathrm{vec}(YMX^T).
+(X\otimes Y)\,\mathrm{vec}(M)=\mathrm{vec}(YMX^\top),
 \]
-
-te gebruiken met $X=A^+$, $Y=B^+$ en $M=F$ volgt
+te gebruiken met $X=A^+$, $Y=B^+$ en $M=F$, volgt
 \[
-c=\mathrm{vec}\!\left(B^+F(A^+)^T\right).
+c=\mathrm{vec}\!\left(B^+F(A^+)^\top\right).
 \]
 Dit is de gezochte uitdrukking.
 
-\subsection*{Opgave 3}
-
-opgave 3 text
-
-\clearpage
-
-\section{Impliciet verschoven QR-algoritme}
 
 
 \subsection*{Opgave 4}
-
-Voor de validatie van de implementatie is een synthetische test gebruikt waarvoor de exacte oplossing gekend is. Eerst werd een co"{e}ffici"{e}ntenmatrix $C_{\text{true}}$ gekozen, daarna zijn de bijhorende data op het rooster opgebouwd via
+\addcontentsline{toc}{subsection}{Opgave 4}
+Voor de validatie van de implementatie is een test gebruikt waarvoor de exacte oplossing gekend is. Eerst werd een co"{e}ffici"{e}ntenmatrix $C_{\text{true}}$ gekozen, daarna zijn de bijhorende data op het rooster opgebouwd via
 \[
-F = B\,C_{\text{true}}\,A^T.
+F = B\,C_{\text{true}}\,A^\top.
 \]
-Vervolgens is met de implementatie een schatting $C_{\text{est}}$ berekend uit $(x,y,F,n,m)$.
+Deze werkwijze volgt uit de stap $Z = BCA^\top$ in het bewijs van Opgave 1. Dit maakt dus de data op basis van de functiewaarden van de veelterm.    Vervolgens is met de implementatie een schatting $C_{\text{est}}$ berekend uit $(x,y,F,n,m)$.
 
 De correctheid is gecontroleerd met drie foutmaten:
 \[
@@ -126,34 +130,88 @@ De correctheid is gecontroleerd met drie foutmaten:
 \qquad
 \|C_{\text{est}}-C_{\text{true}}\|_{F},
 \qquad
-\|B\,C_{\text{est}}\,A^T-F\|_{F}.
+\|B\,C_{\text{est}}\,A^\top-F\|_{F}.
 \]
 Alle maten liggen op machineprecisie. Dat bevestigt dat de opbouw van $A$ en $B$, de matrixformule en het oplossen met de backslashoperator consistent zijn.
 
-Deze test is representatief: elk lineair kleinstekwadratenprobleem van dit type kan worden teruggebracht tot dezelfde keten ``co"{e}ffici"{e}nten $\rightarrow$ data $\rightarrow$ reconstructie'', zodat fouten in indexering, vectorisatie of matrixvolgorde onmiddellijk zichtbaar worden.
 
-\subsection*{Opgave 5}
+\subsection*{Opgave 5} \label{sub:opgave5}
+\addcontentsline{toc}{subsection}{Opgave 5}
 
-opgave 5 text
+De twee datasets op het $31 \times 31$-rooster zijn benaderd met maximale veeltermgraad $n=m=7$. Het benaderende oppervlak met bijhorende matrix $Z$ is berekend met $Z = B C A^\top$, aangezien in \hyperref[sub:opgave1]{Opgave~1} aangetoond is dat dit equivalent is. Dit is eveneens effici\"{e}nter. De reden daarvoor is dat $\Gamma = A \otimes B$ een $961\times64$ matrix is, want $A$ en $B$ hebben dimensie $31\times8$. Bovendien wordt die grote matrix nadien nog vermenigvuldigd met de vector $c$ om $z = \Gamma c$ te berekenen. Dit vereist meer rekenkracht en geheugen dan de eerste manier, want die vermenigvuldigt slechts matrices van dimensie $31 \times 8$ en $8 \times 8$.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.58\textwidth]{Figuren/opgave5exp.eps}
+    \caption{Bivariate veeltermbenadering met graad $n=m=7$ van de exponenti\"{e}le doelfunctie (Dataset 1).}    \label{fig:opgave5exp}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.58\textwidth]{Figuren/opgave5membrane.eps}
+    \caption{Bivariate veeltermbenadering met graad $n=m=7$ van de ‘Matlabfunctie’ (\texttt{membrane}-functie) (Dataset 2).}
+    \label{fig:opgave5membrane}
+\end{figure}
+
+Figuur \ref{fig:opgave5exp} en Figuur \ref{fig:opgave5membrane} tonen de veeltermoppervlakken en de originele datapunten van respectievelijk de exponenti\"{e}le functie  $f_{ij} = \exp(1 - (2.5x_i)^2 - (2y_j)^2)$  (Dataset 1) en de \texttt{membrane}-functie (Dataset 2). Figuur \ref{fig:opgave5exp} toont dat de bivariate veelterm de exponenti\"{e}le functie goed benadert.
+
+De \texttt{membrane}-dataset is gedefinieerd op een L-vormig domein, waarbij de afgeleide heel groot is voor de punten dicht bij de rand. Veeltermen zijn geen goede keuze voor het benaderen van dit soort niet-gladde functies, en dit leidt tot oscillaties aan de randen van het domein wat te zien is op Figuur \ref{fig:opgave5membrane}.
 \subsection*{Opgave 6}
+\addcontentsline{toc}{subsection}{Opgave 6}
 
-opgave 6 text
+Om de veeltermbenaderingen kwantitatief te evalueren, is het verloop van de kostfunctie berekend aan de hand van de formules uit \hyperref[sub:opgave1]{Opgave~1}: 
+\[
+K(d) = \sum_{i,j} (f_{ij} - z(x_i,y_j))^2 =\|F-Z\|_F^2
+=\|\mathrm{vec}(F)-\mathrm{vec}(Z)\|_2^2.
+\]
+De kost is berekend voor de graden $n=m=d$ gaande van 1 tot en met 20. Figuur \ref{fig:opgave6kost} toont een semi-logaritmische plot van deze kost in functie van $d$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.58\textwidth]{Figuren/opgave6.eps}
+    \caption{Kostfunctie van de bivariate veeltermbenadering met graad $n=m=d = 1,..., 20$ voor de exponenti\"{e}le functie  $f_{ij} = \exp(1 - (2.5x_i)^2 - (2y_j)^2)$  (Dataset 1) en de \texttt{membrane}-functie (Dataset 2).}
+    \label{fig:opgave6kost}
+\end{figure}
+
+
+Figuur \ref{fig:opgave6kost} toont dat de kostfunctie voor de gladde exponenti\"{e}le functie (Dataset 1) snel en monotoon daalt richting de machineprecisie. Een bivariate veeltermbenadering is voor deze functie dus een geschikte benaderingsmethode. 
+
+Voor de \texttt{membrane}-functie (Dataset 2) stagneert de kostfunctie echter op een relatief hoge fout. Zelfs bij het verhogen van de graad tot $d=20$ neemt de fout nog nauwelijks af. Dit bevestigt de oscillatieverschijnselen in \hyperref[sub:opgave1]{Opgave 5}. Zoals daar reeds uitgelegd is, is een veelterm niet geschikt om deze functie te benaderen vanwege het feit dat de eerste afgeleide heel groot is op de rand van het L-vormig domein. Het verhogen van de graad helpt dan niet om de fout te verkleinen, maar maakt de oscillaties erger over de rest van het domein.
+
+Om ten slotte de \texttt{membrane}-functie beter te benaderen, kunnen er tensorproduct-splinefuncties gebruikt worden. Voor twee dimensies en bv. $k=3$, zijn dit dan bikubische splines. Deze kunnen geschreven worden als een lineaire combinatie van de kruisproducten van $1D$-splines. Aangezien splines slechts in een aantal deelintervallen verschillen van $0$, is de invloed van elke coëfficiënt lokaal en zorgen de punten op de rand van het L-vormig domein niet meer voor benaderingsfouten in de rest van het domein.
+\subsection*{Opgave 7}
+\addcontentsline{toc}{subsection}{Opgave 7}
+Figuur \ref{fig:opgave7_3Dmatterhorn} toont de 3D-weergave van de Matterhorn-data en de berekende veeltermbenadering van graad $n = m = 25$. Vervolgens geven Figuur \ref{fig:opgave7bovenaanzicht} en Figuur \ref{fig:opgave7contour} respectievelijk het bovenaanzicht en de contourplots. In de buurt van de plaatsen waar er steile flanken zijn, is de benadering slechter. Bovendien worden de ruwe overgangen  zachter. 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Figuren/opgave7_3Dmatterhorn.eps}
+    \caption{3D-weergave van de Matterhorn-data (links) en de veeltermbenadering (rechts).}
+    \label{fig:opgave7_3Dmatterhorn}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Figuren/opgave7bovenaanzicht.eps}
+    \caption{Bovenaanzicht van de originele hoogtegegevens (links) en de veeltermbenadering (rechts).}
+    \label{fig:opgave7bovenaanzicht}
+\end{figure}\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.80\textwidth]{Figuren/opgave7contour.eps}
+    \caption{Contourplot van de oorspronkelijke data (links) en de veeltermbenadering (rechts).}
+    \label{fig:opgave7contour}
+\end{figure}
+
+
 
 \chapter{Kleinstekwadratenbenadering met splinefuncties}
-
-\section{Kubische splinebenadering}
-
 \subsection*{Opgave 8} \label{sec:opgave8}
-
-Voor de visualisatie van de B-splinebasis op \([0,1]\) is een kubische basis (\(k=3\)) gebruikt met open geklemde knopenrij
+\addcontentsline{toc}{subsection}{Opgave 8}
+Voor de visualisatie van de B-splinebasis op \([0,1]\) is een kubische basis (\(k=3\)) gebruikt, en een open geklemde knopenrij met inwendig equistante knopen:
 \[
 t = [\underbrace{0,\,0,\,0,\,0}_{k+1},\; 0.2,\; 0.4,\; 0.6,\; 0.8,\; \underbrace{1,\,1,\,1,\,1}_{k+1}].
 \]
-Hieruit volgt \(nb=\mathrm{length}(t)-k-1=8\).  
-Elke basisfunctie \(N_{i,4}\) is geëvalueerd via het algoritme van de Boor met eenheidscoëfficiënten \(c=e_i\), zodat \(s_i(x)=N_{i,4}(x)\).
+Vanwege de ($k+1$)-meervoudige knopen aan de rand, is de functiewaarde van alle basisfuncties gelijk aan nul buiten $[0,1]$. Uit deze gegevens volgt dan het aantal basisfuncties \(nb=\mathrm{length}(t)-k-1=8\).
+Elke basisfunctie \(N_{i,4}\) is geëvalueerd via het algoritme van de Boor door als coëfficiëntenvector de $i$-de eenheidsvector  \(c=e_i\) te kiezen, zodat \(s_i(x)=N_{i,4}(x)\).
 
-De resultaten bevestigen de verwachte eigenschappen: niet-negativiteit, lokale steun en partitie van de eenheid \(\sum_i N_{i,4}(x)=1\) op \([0,1]\) (numeriek tot op machineprecisie). De basisfuncties zijn weergegeven in Figuur~\ref{fig:opgave8_basis}.
+De resultaten bevestigen de verwachte eigenschappen: niet-negativiteit, lokale steun en partitie van de eenheid \(\sum_i N_{i,4}(x)=1\) op \([0,1]\) (numeriek tot op machineprecisie). Figuur \ref{fig:opgave8_basis} geeft de basisfuncties weer.
 
 \begin{figure}[h]
     \centering
@@ -165,52 +223,52 @@ De resultaten bevestigen de verwachte eigenschappen: niet-negativiteit, lokale s
 
 
 \subsection*{Opgave 9} \label{sec:opgave9}
+\addcontentsline{toc}{subsection}{Opgave 9}
 
 De correctheid van \texttt{kkb\_spline(t,x,f,xplot)} is gevalideerd met de volgende testen:
 
 \begin{enumerate}[label=\textbf{\alph*)}]
-    \item \textbf{Exacte reconstructietest:}
+
+    \item \textbf{Exacte reconstructietest (Test 1a):}
     data gegenereerd uit een gekende kubische spline met dezelfde knopenrij: de reconstructiefout ligt op machineprecisie.
     
-    \item \textbf{Residu op trainingspunten:}
+    \item \textbf{Residu op trainingspunten (Test 1b):}
     evaluatie in de originele meetpunten met residumaten \(\|r\|_\infty\), \(\|r\|_2\) en RMSE: de fout ligt op machineprecisie.
-    
-    \item \textbf{Randpunttest:}
-    expliciete controle van de evaluatie in \(x=0\) en \(x=1\).
-    
-    \item \textbf{Robuustheid bij ruis:}
+
+    \item \textbf{Robuustheid bij ruis (Test 2):}
     additieve ruis op de meetdata en vergelijking van de fit met de onderliggende trend.
-    
-    \item \textbf{Functie-afhankelijkheid:}
+
+    \item \textbf{Functie-afhankelijkheid (Test 3):}
     vergelijking op representatieve randgevallen (glad, knik, hoge frequentie, sprong).
+    
+    \item \textbf{Randpunttest (Test 4):}
+    expliciete controle van de evaluatie in \(x=0\) en \(x=1\).
 \end{enumerate}
 
-De correcte werking wordt visueel geïllustreerd in Figuur~\ref{fig:opgave9_ruis} en Figuur~\ref{fig:opgave9_randgevallen}. Figuur~\ref{fig:opgave9_ruis} toont dat de benadering stabiel blijft onder ruis; Figuur~\ref{fig:opgave9_randgevallen} toont dat gladde functies merkbaar beter benaderd worden dan niet-gladde of sterk oscillatorische functies.
+Figuur~\ref{fig:opgave9_ruis} en Figuur~\ref{fig:opgave9_randgevallen} illustreren dit visueel voor respectievelijk Test 2 en 3. Figuur~\ref{fig:opgave9_ruis} toont dat de benadering stabiel blijft onder ruis. De fout is orde $10^{-2}$. Figuur~\ref{fig:opgave9_randgevallen} toont dat gladde functies merkbaar beter benaderd worden dan niet-gladde of sterk oscillatorische functies.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.56\textwidth]{Figuren/opgave9_ruisbenadering.eps}
-    \caption{Splinebenadering bij ruis op de meetdata (ruisrobuustheidstest).}
+    \caption{Splinebenadering bij ruis op de meetdata (links) en de absolute benaderingsfout (rechts) (Test 2).}
     \label{fig:opgave9_ruis}
 \end{figure}
-
-
-
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.62\textwidth]{Figuren/opgave9_tests.eps}
-    \caption{Randgevallen voor functie-afhankelijkheid: glad, knik, hoge frequentie en sprongfunctie.}
+    \caption{Randgevallen voor functie-afhankelijkheid: glad, knik, hoge frequentie en sprongfunctie (Test 3).}
     \label{fig:opgave9_randgevallen}
 \end{figure}
 
 
 \subsection*{Opgave 10} \label{sec:opgave10}
+\addcontentsline{toc}{subsection}{Opgave 10}
 
 De meetgegevens uit \texttt{exercise10.mat} zijn benaderd met dezelfde splineprocedure als in Opgave~9, met knopenrijen \(t_1\) en \(t_2\).  
-De vergelijking van beide benaderingen is weergegeven in Figuur~\ref{fig:opgave10_t1t2}.
+Figuur~\ref{fig:opgave10_t1t2} geeft de vergelijking van beide benaderingen weer.
 
-Op basis van de bekomen foutmaten op de meetpunten (RMSE en maximale absolute fout) levert \(t_2\) de beste benadering. Dit is consistent met de knoopplaatsing: \(t_2\) voorziet meer lokale flexibiliteit in het interval waar de data de sterkste vormverandering vertoont, terwijl \(t_1\) de knopen gelijkmatig verdeelt. In Figuur~\ref{fig:opgave10_t1t2} zijn de knopen expliciet als markeringen op de \(x\)-as weergegeven.
+Op basis van de bekomen foutmaten op de meetpunten (RMSE en maximale absolute fout) levert \(t_2\) de beste benadering. Dit is consistent met de knoopplaatsing: \(t_2\) voorziet meer lokale flexibiliteit in het interval waar de data de sterkste vormverandering vertoont, terwijl \(t_1\) de knopen equidistant verdeelt. In Figuur~\ref{fig:opgave10_t1t2} zijn de knopen expliciet als markeringen op de \(x\)-as weergegeven.
 
 \begin{figure}[h]
     \centering
@@ -223,6 +281,7 @@ Op basis van de bekomen foutmaten op de meetpunten (RMSE en maximale absolute fo
 
 
 \subsection*{Opgave 11} \label{sec:opgave11}
+\addcontentsline{toc}{subsection}{Opgave 11}
 
 Voor de gekozen knopenrij is de structuur van matrix \(M\) uit
 \[
@@ -231,7 +290,7 @@ Mc=f
 gevisualiseerd met \texttt{spy}, zie Figuur~\ref{fig:opgave11_spyM}.  
 De matrix is schaars en bandachtig: per rij zijn slechts \(k+1\) basisfuncties niet nul (voor kubische splines: maximaal 4). Dit volgt uit de lokale steun van B-splines; aan de randen ontstaan bijkomende structurele nullen.
 
-Voor deze matrixstructuur is een \textbf{sparse Householder-QR-factorisatie} een efficiënte keuze. De matrix \(M\) is overgedetermineerd en sterk rechthoekig: het aantal rijen \(R\) is aanzienlijk groter dan het aantal kolommen \((n+k)\), zodat orthogonale Householder-transformaties bijzonder geschikt zijn voor een stabiele least-squaresoplossing. Householder-reflecties zijn numeriek stabiel. Een dichte QR-factorisatie negeert deze sparsiteit en is daarom minder efficiënt in tijd en geheugen.
+Voor deze matrixstructuur is een \textbf{sparse Householder-QR-factorisatie} een efficiënte keuze. De matrix \(M\) is overgedetermineerd en sterk rechthoekig: het aantal rijen \(R\) is aanzienlijk groter dan het aantal kolommen \((n+k)\), zodat orthogonale Householder-transformaties bijzonder geschikt zijn voor een stabiele kleinstekwadratenoplossing. Householder-reflecties zijn numeriek stabiel. Een dichte QR-factorisatie negeert deze sparsiteit en is daarom minder efficiënt in tijd en geheugen.
 
 \begin{figure}[h]
     \centering
@@ -244,12 +303,14 @@ Voor deze matrixstructuur is een \textbf{sparse Householder-QR-factorisatie} een
 
 
 \subsection*{Opgave 12} \label{sec:opgave12}
+\addcontentsline{toc}{subsection}{Opgave 12}
+
 
 In de praktijk hebben B-splines duidelijke voordelen ten opzichte van afgeknotte machtsfuncties als basis voor splinebenadering.
 
-Ten eerste hebben B-splines \emph{compacte lokale steun}: elke basisfunctie is slechts niet nul op een beperkt aantal opeenvolgende knoopintervallen. Daardoor veroorzaakt een lokale wijziging van een coëfficiënt enkel een lokale wijziging van de benadering. Afgeknotte machtsfuncties \((x-\tau)_+^p\) zijn weliswaar afgeknot, maar op \([0,1]\) actief op \([\tau,1]\); hun invloed is dus minder lokaal en strekt zich typisch over een groter deel van het domein uit, wat lokale vormcontrole minder direct maakt.
+Ten eerste hebben B-splines \emph{compacte lokale steun}: elke basisfunctie is slechts niet nul op een beperkt aantal opeenvolgende knoopintervallen. Daardoor veroorzaakt een lokale wijziging van een coëfficiënt enkel een lokale wijziging van de benadering. Afgeknotte machtsfuncties \((x-\tau)_+^p\) zijn weliswaar afgeknot, maar binnen het domein \([0,1]\) zijn ze enkel actief op \([\tau,1]\). Hun invloed is dus minder lokaal en strekt zich typisch over een groter deel van het domein uit, wat het moeilijker maakt om de benadering lokaal te controleren.
 
-Ten tweede is de numerieke conditionering van B-splinebases doorgaans aanzienlijk beter. De bijhorende stelsels zijn daardoor stabieler op te lossen, terwijl bases met afgeknotte machtsfuncties sneller slecht geconditioneerd raken, vooral bij hogere graad of fijnere knopenverdeling.
+Ten tweede is de numerieke conditionering van B-splinebases doorgaans aanzienlijk beter. De bijhorende stelsels zijn daardoor stabieler op te lossen, terwijl bases met afgeknotte machtsfuncties sneller slecht geconditioneerd raken, vooral bij hogere graad of wanneer knopen dichter op elkaar liggen.
 
 Ten derde ontstaat bij B-splines een schaarse en bandachtige systeemmatrix, omdat in elk punt slechts een beperkt aantal basisfuncties niet nul is. Dit laat efficiënte algoritmen toe (zoals sparse QR), met lagere reken- en geheugenkost. Bij afgeknotte machtsfuncties is de matrix in het algemeen dichter en computationeel minder gunstig.
 
@@ -264,41 +325,41 @@ Tot slot kunnen B-splines efficiënt en stabiel geëvalueerd worden via het algo
 
 
 \clearpage
-\chapter{Gebruik van GenAI -> DIT MOET NOG AANGEPAST WORDEN NAAR WAT WIJ GEBRUIKT HEBBEN!!!}
+% \chapter{Gebruik van GenAI -> DIT MOET NOG AANGEPAST WORDEN NAAR WAT WIJ GEBRUIKT HEBBEN!!!}
 
-Tijdens de uitwerking van dit project werd in beperkte mate gebruikgemaakt van generatieve artificiële intelligentie (GenAI), voornamelijk ter ondersteuning van verslagstructuur, formulering en syntaxadvies. AI werd uitsluitend gebruikt als hulpmiddel, waarbij alle gegenereerde output kritisch geëvalueerd en handmatig aangepast werd door het projectteam. De uiteindelijke inhoud en formuleringen zijn volledig bepaald door de auteurs van dit verslag.
+% Tijdens de uitwerking van dit project werd in beperkte mate gebruikgemaakt van generatieve artificiële intelligentie (GenAI), voornamelijk ter ondersteuning van verslagstructuur, formulering en syntaxadvies. AI werd uitsluitend gebruikt als hulpmiddel, waarbij alle gegenereerde output kritisch geëvalueerd en handmatig aangepast werd door het projectteam. De uiteindelijke inhoud en formuleringen zijn volledig bepaald door de auteurs van dit verslag.
 
-De voornaamste gebruikte GenAI-modellen waren:
-\begin{itemize}
-    \item \textbf{Copilot} – gebruikt om geschreven teksten van het verslag na te kijken en verbeteren maar vooral hulp bij \textsc{Matlab}- en \LaTeX{}-syntax te bieden, zowel als suggesties voor te stellen voor foutopsporing tijdens debugging van \textsc{Matlab}-code.
-    \item \textbf{ChatGPT} – incidenteel geraadpleegd (aanvullend ingezet) vooral voor verwoording en algemene formulering. Daarnaast voor ook voor opzoekwerk en eventuele extra uitleg rondom de onderwerpen van de opgave.
-\end{itemize}
+% De voornaamste gebruikte GenAI-modellen waren:
+% \begin{itemize}
+%     \item \textbf{Copilot} – gebruikt om geschreven teksten van het verslag na te kijken en verbeteren maar vooral hulp bij \textsc{Matlab}- en \LaTeX{}-syntax te bieden, zowel als suggesties voor te stellen voor foutopsporing tijdens debugging van \textsc{Matlab}-code.
+%     \item \textbf{ChatGPT} – incidenteel geraadpleegd (aanvullend ingezet) vooral voor verwoording en algemene formulering. Daarnaast voor ook voor opzoekwerk en eventuele extra uitleg rondom de onderwerpen van de opgave.
+% \end{itemize}
 
-Onderstaande tabel \ref{tabel_GenAI} geeft een overzicht van de domeinen waarin GenAI al dan niet werd gebruikt:
+% Onderstaande tabel \ref{tabel_GenAI} geeft een overzicht van de domeinen waarin GenAI al dan niet werd gebruikt:
 
-\begin{table}[H]
-    \centering
-    \caption{Toepassingen van GenAI tijdens het project}
-    \begin{tabular}{|p{8cm}|c|}
-        \hline
-        \textbf{Toepassingsdomein} & \textbf{GenAI gebruikt} \\
-        \hline
-        Schrijven van eigenlijke projectcode (algoritmen en implementatie) & Nee \\
-        \hline
-        Debugging van \textsc{Matlab}-code (Copilot, ChatGPT) & Ja \\
-        \hline
-        Syntaxhulp voor \LaTeX{}-notatie (Copilot, ChatGPT) & Ja \\
-        \hline
-        Inhoudelijke analyse of wiskundige bewijzen & Nee \\
-        \hline
-        Schrijven van de kern van de tekst en de grote lijnen van het verslag & Nee \\
-        \hline
-        Geschreven tekst corrigeren en verbeteren (Copilot, ChatGPT) & Ja \\
-        \hline
-        Eindredactie en validatie van inhoud en formulering & Nee \\
-        \hline
-    \end{tabular}
-    \label{tabel_GenAI}
-\end{table}
+% \begin{table}[H]
+%     \centering
+%     \caption{Toepassingen van GenAI tijdens het project}
+%     \begin{tabular}{|p{8cm}|c|}
+%         \hline
+%         \textbf{Toepassingsdomein} & \textbf{GenAI gebruikt} \\
+%         \hline
+%         Schrijven van eigenlijke projectcode (algoritmen en implementatie) & Nee \\
+%         \hline
+%         Debugging van \textsc{Matlab}-code (Copilot, ChatGPT) & Ja \\
+%         \hline
+%         Syntaxhulp voor \LaTeX{}-notatie (Copilot, ChatGPT) & Ja \\
+%         \hline
+%         Inhoudelijke analyse of wiskundige bewijzen & Nee \\
+%         \hline
+%         Schrijven van de kern van de tekst en de grote lijnen van het verslag & Nee \\
+%         \hline
+%         Geschreven tekst corrigeren en verbeteren (Copilot, ChatGPT) & Ja \\
+%         \hline
+%         Eindredactie en validatie van inhoud en formulering & Nee \\
+%         \hline
+%     \end{tabular}
+%     \label{tabel_GenAI}
+% \end{table}
 
-Het projectteam draagt de volledige verantwoordelijkheid voor de inhoud van dit verslag. AI werd uitsluitend gebruikt als ondersteunend instrument, zonder afbreuk te doen aan de eigen bijdrage, analyse en inzichten. Alle gegenereerde inhoud werd door het projectteam kritisch bekeken en gecontroleerd.
+% Het projectteam draagt de volledige verantwoordelijkheid voor de inhoud van dit verslag. AI werd uitsluitend gebruikt als ondersteunend instrument, zonder afbreuk te doen aan de eigen bijdrage, analyse en inzichten. Alle gegenereerde inhoud werd door het projectteam kritisch bekeken en gecontroleerd.
