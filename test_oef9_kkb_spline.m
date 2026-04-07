@@ -1,5 +1,4 @@
-% Testscript voor oefening 9
-% Doel: correcte werking van kkb_spline aantonen met kwantitatieve testen
+% testscript voor oefening 9
 clear; clc; close all;
 
 rng(1); % vaste seed voor reproduceerbaarheid

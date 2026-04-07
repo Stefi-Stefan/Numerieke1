@@ -5,7 +5,7 @@ function Z = kkb_spline(t, x, f, xplot)
 %   Z = kkb_spline(t, x, f, xplot)
 %
 %   Input:
-%       t     - kolomvector met knopen(lengte n+2k+1) 
+%       t     - kolomvector met knopen(lengte n+2k+1)
 %       x     - kolomvector met meetpunten (lengte R)
 %       f     - kolomvector met functiewaarden in x (lengte R)
 %       xplot - rijvector met evaluatiepunten (lengte N)

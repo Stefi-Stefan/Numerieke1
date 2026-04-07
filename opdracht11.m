@@ -1,51 +1,46 @@
-% Opgave 11
-% Structuur van matrix M en bespreking van efficiente QR-decompositie.
+% structuur van matrix M en bespreking van efficiente QR-decompositie
 clear; clc; close all;
 
-% Laad de data van oefening 10.
 S = load('exercise10.mat');
 x = S.x(:);
-y = S.y(:);
+f = S.y(:);
 t1 = S.t1(:);
 t2 = S.t2(:);
 
-% Kies een van de twee knopenrijen.
-% Hier nemen we t2 (beste fit oef 10)
+% kies een van de twee knopenrijen, hier nemen we t2 (beste fit oef 10)
 t = t2;
+k = 3; % kubische splines
 
-% Kubische splines.
-k = 3;
-
-% Bouw matrix M van stelsel M*c = y.
+% bouw matrix M van stelsel M*c = f
 M = bouwM(t, x, k);
 
-% Zet om naar sparse voor duidelijke spy-plot en efficiente QR.
+% zet om naar sparse voor duidelijke spy-plot en efficiente QR
 Ms = sparse(M);
 
-% Visualiseer de structuur van M.
+% visualiseer de structuur van M
 figure;
 spy(Ms);
 title('Sparsity-structuur van M (opgave 11)');
 xlabel('kolomindex');
 ylabel('rijindex');
 
-% Bepaal enkele structuurmaten.
-[Rm, Cm] = size(Ms);
-nzM = nnz(Ms);
-densiteit = nzM / (Rm * Cm);
-
+[Rm, Cm] = size(Ms); % Rm = aantal rijen (meetpunten R)
+% Cm = aantal kolommen (basisfuncties n+k)
+nzM = nnz(Ms); % nnz = Number of Non-Zero elements
+% telt alle elementen die niet 0 zijn
+densiteit = nzM / (Rm * Cm);  % verhouding van niet-nul elementen ten opzichte van de hele matrix
 rowNnz = full(sum(Ms ~= 0, 2));
-maxNnzRow = max(rowNnz);
-minNnzRow = min(rowNnz);
+maxNnzRow = max(rowNnz); % maximale aantal actieve basisfuncties in 1 meetpunt (theoretisch max k+1)
+minNnzRow = min(rowNnz); %minimale aantal actieve basisfuncties
 
-% Benaderde bandbreedte: uiterste kolommen met niet-nul per rij.
+% benaderde bandbreedte: uiterste kolommen met niet-nul per rij
 onderBand = 0;
 bovenBand = 0;
 for r = 1:Rm
-    cols = find(Ms(r, :));
+    cols = find(Ms(r, :));% kolom-indices van alle niet-nul elementen op rij r
     if ~isempty(cols)
-        onderBand = max(onderBand, r - cols(1));
-        bovenBand = max(bovenBand, cols(end) - r);
+        onderBand = max(onderBand, r - cols(1));% afstand diagonaal tot het eerste niet-nul element
+        bovenBand = max(bovenBand, cols(end) - r);% afstand diagonaal tot het laatste niet-nul element
     end
 end
 
@@ -59,7 +54,7 @@ fprintf('verwacht voor kubisch: maximaal k+1 = %d niet-nul per rij\n', k+1);
 fprintf('geschatte onderband: %d\n', onderBand);
 fprintf('geschatte bovenband: %d\n', bovenBand);
 
-% QR op sparse matrix (economy).
+% QR op sparse matrix (economy)
 [Q, R] = qr(Ms, 0);
 
 figure;
@@ -70,24 +65,18 @@ ylabel('rijindex');
 
 fprintf('\nEFFICIENTE QR-BEREKENING\n');
 fprintf('1) M is schaars en bandvormig (door lokale steun van B-splines).\n');
-fprintf('2) Gebruik sparse QR in plaats van dense QR (bv. qr(sparse(M),0)).\n');
+fprintf('2) Gebruik sparse QR in plaats van dense QR : qr(sparse(M),0).\n');
 fprintf('3) Werk met transformaties op f (Q''*f) zonder expliciet volledige Q op te slaan.\n');
 fprintf('4) Zo beperk je rekentijd en geheugen, zeker voor grote datasets.\n');
 
-% Optioneel: los LS op via QR en vergelijk met backslash.
-c_qr = R \ (Q' * y);
-c_bs = Ms \ y;
+% kleinstekwadratenbenadering oplossen via QR en vergelijken met backslash
+c_qr = R \ (Q' * f);
+c_bs = Ms \ f;
 relVerschil = norm(c_qr - c_bs, 2) / (norm(c_bs, 2) + eps);
 fprintf('relatief verschil tussen QR-oplossing en backslash: %.3e\n', relVerschil);
 
-% Extra tekst voor verslag.
-fprintf('\nKORTE BESPREKING VOOR HET VERSLAG\n');
-fprintf('Elke rij van M bevat slechts enkele niet-nul elementen omdat maar k+1 basisfuncties lokaal actief zijn.\n');
-fprintf('Daardoor heeft M een bandstructuur en lage densiteit, zichtbaar in spy(M).\n');
-fprintf('Een sparse QR-decompositie is daarom de aangewezen efficiente methode.\n');
-
 function M = bouwM(t, x, k)
-% Bouw matrix M met M(r,i) = N_i,k+1(x_r).
+% bouw matrix M met M(r,i) = N_i,k+1(x_r)
 
 nb = length(t) - k - 1;
 R = length(x);
@@ -113,7 +102,7 @@ end
 end
 
 function span = findSpan(nb, k, x, t)
-% Bepaal span-index zodat t(span) <= x < t(span+1).
+% bepaal span-index zodat t(span) <= x < t(span+1)
 
 low = k + 1;
 high = nb + 1;
@@ -130,7 +119,7 @@ span = mid;
 end
 
 function Nloc = basisFuns(i, x, k, t)
-% Bereken lokale niet-nul basisfuncties in punt x.
+% bereken lokale niet-nul basisfuncties in punt
 
 Nloc = zeros(1, k+1);
 Nloc(1) = 1;
