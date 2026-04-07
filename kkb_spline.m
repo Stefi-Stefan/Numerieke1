@@ -5,7 +5,7 @@ function Z = kkb_spline(t, x, f, xplot)
 %   Z = kkb_spline(t, x, f, xplot)
 %
 %   Input:
-%       t     - kolomvector met knopen(lengte n+2k+1) 
+%       t     - kolomvector met knopen(lengte n+2k+1)
 %       x     - kolomvector met meetpunten (lengte R)
 %       f     - kolomvector met functiewaarden in x (lengte R)
 %       xplot - rijvector met evaluatiepunten (lengte N)
@@ -13,21 +13,18 @@ function Z = kkb_spline(t, x, f, xplot)
 %   Output:
 %       Z     - rijvector met splinewaarden in xplot
 
-% Zet alles in de juiste vorm.
 t = t(:);
 x = x(:);
 f = f(:);
 xplot = xplot(:).';
 
-% In deze opdracht werken we met kubische splines.
+%kubische splines
 k = 3;
 
-% Aantal basisfuncties.
-nb = length(t) - k - 1;
-
-% Bouw de matrix M van het overgedetermineerde stelsel M*c = f.
+nb = length(t) - k - 1;% aantal basisfuncties
+% de matrix M van het overgedetermineerde stelsel M*c = f
 R = length(x);
-M = zeros(R, nb);
+M = sparse(R, nb);
 for r = 1:R
     xr = x(r);
 
@@ -41,25 +38,21 @@ for r = 1:R
         span = findSpan(nb, k, xr, t);
     end
 
-    % Enkel k+1 basisfuncties zijn niet nul in xr.
+    % enkel k+1 basisfuncties zijn niet nul in xr
     Nloc = basisFuns(span, xr, k, t);
     indices = (span-k):span;
     M(r, indices) = Nloc;
 end
 
-% Los het kleinstekwadratenprobleem op.
+% los het kleinstekwadratenprobleem op
 c = M \ f;
 
-% Evalueer de spline in de gevraagde punten met deBoor.
-Z = zeros(1, length(xplot));
-for j = 1:length(xplot)
-    Z(j) = deBoor(xplot(j), t, c, k);
-end
-
+% evalueer de spline in de gevraagde punten met deBoor
+Z = deboor(k, t, c, xplot);
 end
 
 function span = findSpan(nb, k, x, t)
-% Bepaal de span-index zodat t(span) <= x < t(span+1).
+% bepaal de span-index zodat t(span) <= x < t(span+1)
 
 low = k + 1;
 high = nb + 1;
@@ -76,7 +69,7 @@ span = mid;
 end
 
 function Nloc = basisFuns(i, x, k, t)
-% Bereken de lokale niet-nul basisfuncties in punt x.
+% bereken de lokale niet-nul basisfuncties in punt x.
 
 Nloc = zeros(1, k+1);
 Nloc(1) = 1;
