@@ -1,5 +1,5 @@
 \chapter{Arnoldi-iteraties voor eigenwaarden-benadering}
-inleiding tot het Arnoldi theorie deel van verslag
+In dit deel worden de theoretische eigenschappen van de Arnoldi-iteratie onderzocht voor de benadering van eigenwaarden en eigenvectoren. De analyse focust op de structuur van Krylovruimten, invariantie-eigenschappen en convergentiegedrag.
 
 \subsection*{Opgave 1(a)}\label{sub:opg1a}
 \addcontentsline{toc}{subsection}{Opgave 1(a)}
@@ -7,37 +7,100 @@ inleiding tot het Arnoldi theorie deel van verslag
 \textbf{Gegeven:} Voor een bepaalde iteratie $j$ is de norm van de georthogonaliseerde vector $\tilde v_j$ nul.
 
 \begin{enumerate}
-    \item Is er een boven- en ondergrens voor $j$? Voor welke niet-nul vector $b$ wordt elk van deze grenzen bereikt?
+    \item Voor een niet-triviale Arnoldi-start geldt $1\leq j\leq m$. De ondergrens $j=1$ wordt bereikt wanneer $b$ een eigenvector van $A$ is (dan is $Ab\in\mathrm{span}\{b\}$ en treedt onmiddellijke breakdown op). De bovengrens wordt bereikt wanneer $b$ een cyclische vector is, d.w.z. wanneer $\dim K_m(A,b)=m$ en geen eerdere breakdown optreedt.
 
-    \item Toon aan dat in dit geval $K_j$ een invariante deelruimte is van $A$.
+    \item Uit $\|\tilde v_j\|=0$ volgt $Aq_j\in K_j$. Voor $i<j$ geldt bovendien $Aq_i\in K_{i+1}\subseteq K_j$. Bijgevolg wordt elke basisvector van $K_j=\mathrm{span}\{q_1,\ldots,q_j\}$ door $A$ opnieuw in $K_j$ afgebeeld, dus $AK_j\subseteq K_j$.
 
-    \item Geef kort aan onder welke voorwaarden $A K_j \subseteq K_j$ van toepassing is.
+    \item $A K_j \subseteq K_j$ geldt precies wanneer in iteratie $j$ geen nieuwe Krylovrichting ontstaat, equivalent met $\|\tilde v_j\|=0$. Equivalent: de minimale veelterm van het paar $(A,b)$ heeft graad ten hoogste $j$.
 
-    \item Toon aan dat in dit geval $K_j = K_{j+1} = K_{j+2} = \ldots$.
+    \item Omdat $Aq_j\in K_j$, geldt $A^\ell b\in K_j$ voor alle $\ell\geq j-1$. Er ontstaan dus geen nieuwe lineair onafhankelijke richtingen meer, zodat de geneste Krylovketen vanaf index $j$ stationair wordt:
+    \[
+    K_j=K_{j+1}=K_{j+2}=\cdots.
+    \]
 
-    \item Toon aan dat in dit geval alle eigenwaarden van $H_j$ ook eigenwaarden van $A$ zijn.
+    \item Met $Q_j=[q_1,\ldots,q_j]$ en invariantie van $K_j$ geldt
+    \[
+    AQ_j=Q_jH_j,\qquad H_j=Q_j^\top A Q_j.
+    \]
+    Dus $H_j$ is de matrixrepresentatie van de beperking van $A$ tot $K_j$, genoteerd als $A\vert_{K_j}$. Elke eigenwaarde van $H_j$ is dus een eigenwaarde van de operator $A$ op die invariante deelruimte, en daardoor noodzakelijk ook een eigenwaarde van $A$ zelf. Bijgevolg geldt $\sigma(H_j)\subseteq\sigma(A)$.
 
-    \item Toon aan dat in dit geval en voor $\det(A) \neq 0$ de oplossing van $Ax=b$ in $K_j$ ligt.
+    \item Omdat $K_j$ invariant is onder $A$, blijft elke vector uit $K_j$ na toepassing van $A$ in $K_j$. Daarom kan $A$ op $K_j$ bekeken worden als
+    \[
+    A\vert_{K_j}:K_j\to K_j.
+    \]
+    Verder geldt $\det(A)\neq 0$, dus $A$ is inverteerbaar en in het bijzonder injectief. Die injectiviteit blijft behouden op de deelruimte $K_j$, zodat $A\vert_{K_j}$ injectief is. Nu hebben domein en codomein van $A\vert_{K_j}$ dezelfde eindige dimensie; daarom is een injectieve lineaire afbeelding automatisch ook surjectief. Dus $A\vert_{K_j}$ is bijectief.
 
-    
+    Omdat $b\in K_j$ en $A\vert_{K_j}$ bijectief is, bestaat er precies één $x\in K_j$ met
+    \[
+    A\vert_{K_j}x=b,
+    \]
+    en dus ligt de oplossing van $Ax=b$ in $K_j$.
+
 \end{enumerate}
 
 \subsection*{Opgave 1(b)}\label{sub:opg1b}
 \addcontentsline{toc}{subsection}{Opgave 1(b)}
 Toon aan dat $K_m(A,b)=K_{m+1}(A,b)$. Wat kun je dan zeggen over de convergentie van de Arnoldi-iteratie?
 
+
+Omdat $A\in\mathbb{R}^{m\times m}$, geldt $K_m(A,b)\subseteq\mathbb{R}^m$ en dus $\dim K_m(A,b)\le m$. Verder is
+\[
+K_{m+1}(A,b)=K_m(A,b)+\mathrm{span}\{A^m b\}.
+\]
+De vectoren $b,Ab,\ldots,A^m b$ vormen $m+1$ vectoren in een $m$-dimensionale ruimte en zijn daarom lineair afhankelijk. Bijgevolg ligt $A^m b$ in de span van $b,Ab,\ldots,A^{m-1}b$, zodat
+\[
+K_{m+1}(A,b)=K_m(A,b).
+\]
+
+Voor Arnoldi betekent dit dat er uiterlijk in stap $m$ geen nieuwe basisvector meer kan worden toegevoegd ("breakdown"). Vanaf dat iteratiemoment blijft de Krylovruimte onveranderd, dus ook de geprojecteerde Hessenbergmatrix verandert niet meer. Daardoor blijven de Ritz-waarden constant over verdere iteraties. De methode is vanaf dan volledig geconvergeerd binnen $\mathbb{R}^m$.
+
+
+
+
 \subsection*{Opgave 1(c)}\label{sub:opg1c}
 \addcontentsline{toc}{subsection}{Opgave 1(c)}
-Beschouw de $(m \times m)$-matrix. IK SNAP NIET HELEMAAL HOE DIE ER NU UIT ZIET, WAAR ZIJN ALLEMAAL 1'EN EN WAAR 0'EN?
+Beschouw de matrix $A\in\mathbb{R}^{m\times m}$ met
+\[
+a_{i+1,i}=1\ (i=1,\ldots,m-1),\qquad a_{1,m}=1,
+\]
+en alle overige elementen gelijk aan $0$.
 
 \begin{enumerate}
-    \item Wat zijn de eigenwaarden en -vectoren van $A$?
+    \item $A$ is een cyclische permutatiematrix en voldoet aan $A^m=I$. Dus elke eigenwaarde $\lambda$ voldoet aan $\lambda^m=1$, zodat
+    \[
+    \lambda_k=e^{2\pi i k/m},\qquad k=0,\ldots,m-1.
+    \]
+    Bijhorende (complexe) eigenvectoren kunnen geschreven worden als
+    \[
+    v^{(k)}=\big(1,\lambda_k,\lambda_k^2,\ldots,\lambda_k^{m-1}\big)^\top.
+    \]
 
-    \item Stel dat $b=e_1$. Geef een uitdrukking voor de Krylovruimte $K_j(A,b)$ met $1 \leq j < m$.
 
-    \item Stel dat $m$ groot is. Verwacht je dat voor $b=e_1$ de Arnoldi-iteratie snel convergeert naar de eigenwaarden en eigenvectoren van $A$? Geef twee argumenten.
+    \item Voor $b=e_1$ geldt
+    \[
+    A^0e_1=e_1,\ A e_1=e_2,\ \ldots,\ A^{j-1}e_1=e_j \quad (j<m).
+    \]
+    Dus
+    \[
+    K_j(A,e_1)=\mathrm{span}\{e_1,e_2,\ldots,e_j\}.
+    \]
 
-    \item In welke mate is het Arnoldi-algoritme geschikt voor het benaderen van eigenwaarden van $A$?
+    \item Snelle convergentie wordt niet verwacht.
+
+    Eerste argument: de eigenwaarden liggen uniform op de eenheidscirkel en vertonen geen spectrale scheiding of dominante cluster; daardoor is er geen kleine subset die snel wordt uitgelicht.
+
+    Tweede argument: voor $j<m$ is $Q_j$ enkel opgebouwd uit de eerste $j$ standaardbasisvectoren, terwijl een genormaliseerde eigenvector van $A$ zijn massa over alle $m$ co"ordinaten spreidt. De projectie op $\mathrm{span}(Q_j)$ behoudt dan slechts een fractie $j/m$ van de energie. Daarom geldt
+    \[
+    \|(I-Q_jQ_j^*)x_i\|_2=\sqrt{1-j/m},
+    \]
+    zodat de fout voor $j\ll m$ dicht bij $1$ blijft en de convergentie traag is.
+
+    \item Voor deze matrix is Arnoldi principieel geschikt: bij voldoende iteraties levert de methode exacte informatie over het spectrum (uiterlijk na opbouw van de volledige Krylovruimte). Als echter met weinig iteraties al een nauwkeurige benadering verwacht wordt, is de geschiktheid beperkt. De eigenwaarden liggen namelijk gelijkmatig op de eenheidscirkel, waardoor geen uitgesproken spectrale scheiding aanwezig is die snelle stabilisatie van enkele Ritz-waarden ondersteunt.
+
+    Samengevat dus geschikt voor volledige spectrumbepaling bij voldoende iteraties; minder geschikt voor snelle partiële spectrumbepaling. Wel blijft de kost per iteratie laag door de zeer schaarse permutatiestructuur van $A$.
+
+
+
 
     
 \end{enumerate}
@@ -46,15 +109,14 @@ Beschouw de $(m \times m)$-matrix. IK SNAP NIET HELEMAAL HOE DIE ER NU UIT ZIET,
 \chapter{Classificatie en kruisvalidatie}
 In dit deel wordt een binair classificatieprobleem uitgewerkt. Eerst wordt het model geformuleerd en numeriek opgelost met Gradient Descent. Vervolgens wordt de modelkeuze onderzocht met verschillende vormen van kruisvalidatie. Deze resultaten worden tot slot analyseert in termen van bias-variantie.
 
+
 \subsection*{Opgave 2(a)}\label{sub:opg2a}
 \addcontentsline{toc}{subsection}{Opgave 2(a)}
-Wat is het expliciete voorschrift van de gradi"ent? Wat zou je doen als de gradi"ent geen analytisch voorschrift had?
-
 Voor
 \[
 J(\beta)=\frac{1}{N}\sum_{i=1}^{N}\log\!\big(1+\exp(-b_i\beta^\top a_i)\big)
 \]
-met $a_i\in\mathbb{R}^n$ en $b_i\in\{-1,1\}$ geldt
+met $a_i\in\mathbb{R}^n$ en $b_i\in\{-1,1\}$ is de gradiënt:
 \[
 \nabla J(\beta)= -\frac{1}{N}\sum_{i=1}^{N}\frac{b_i a_i}{1+\exp(b_i\beta^\top a_i)}.
 \]
@@ -71,25 +133,26 @@ Indien geen analytisch voorschrift beschikbaar is, kan de gradi"ent numeriek ben
 \]
 Deze aanpak is algemeen toepasbaar, maar vereist extra functie-evaluaties en een zorgvuldige keuze van $h$.
 
+
 \subsection*{Opgave 2(b)}\label{sub:opg2b}
 \addcontentsline{toc}{subsection}{Opgave 2(b)}
-Beschrijf en motiveer de Matlab-implementatie van Gradient Descent: stapgrootte, convergentiecriterium en aantal convergentiestappen.
 
-De implementatie is opgenomen in \texttt{GD.m} met de gevraagde functieheader. De iteratie is
+De implementatie is uitgewerkt in \texttt{GD.m}. De iteratie is
 \[
 x_{k+1}=x_k-\alpha_k\nabla f(x_k).
 \]
-Als initiële stapgrootte wordt een vaste waarde gebruikt, gevolgd door backtracking (Armijo-voorwaarde). Daardoor blijft de methode bruikbaar voor functies met verschillende schaal en kromming, zonder handmatige herafstemming per probleem.
+Als initiële stapgrootte wordt een vaste waarde gebruikt (default 1), gevolgd door backtracking (Armijo-voorwaarde). Daardoor blijft de methode bruikbaar voor functies met verschillende schaal en kromming, zonder handmatige herafstemming per probleem.
 
 Als stopcriteria worden gecombineerd:
 \[
 \|\nabla f(x_k)\|_2 \leq \varepsilon_g,
 \qquad
 \|x_{k+1}-x_k\|_2 \leq \varepsilon_x\,(1+\|x_k\|_2),
-\]
+\] (gradiënt vlak genoeg of stapgrootte te klein) 
 naast een bovengrens op het aantal iteraties. Dit voorkomt zowel vroegtijdig stoppen als oneindig dooritereren.
 
-Het aantal convergentiestappen is probleemafhankelijk en wordt beïnvloed door conditionering, startpunt en gekozen parameters. Met backtracking is doorgaans een stabiele daling van de doelfunctie observeerbaar, maar zonder globale line-search-optimaliteit blijft een uniforme a-priorigrens op het aantal stappen in het algemeen afwezig.
+Het aantal convergentiestappen is probleemafhankelijk en wordt beïnvloed door conditionering, startpunt en gekozen parameters. Met backtracking is doorgaans een stabiele daling van de doelfunctie observeerbaar, maar zonder globale line-search-optimaliteit blijft een uniforme a-priori grens op het aantal stappen afwezig.
+
 
 \subsection*{Opgave 2(c)}\label{sub:opg2c}
 \addcontentsline{toc}{subsection}{Opgave 2(c)}
@@ -126,23 +189,23 @@ Herhaal Opgave 2(h) vijf keer met geschudde data.
 
 \subsection*{Opgave 2(j)}\label{sub:opg2j}
 \addcontentsline{toc}{subsection}{Opgave 2(j)}
-Onderzoek de invloed van datasetgrootte op bias en variantie van de LOOCV-schatter met samples uit \texttt{BigDatasetCV.mat}.
+Onderzoek de invloed van datasetgrootte op bias en variantie van de LOOCV-schatter met samples uit \texttt{BigDatasetCV.mat}
 
 \subsection*{Opgave 2(k)}\label{sub:opg2k}
 \addcontentsline{toc}{subsection}{Opgave 2(k)}
-Onderzoek de invloed van $K$ op de bias van $CV^K$ voor $N=400$, $n=3$ en $K=1,\ldots,15$.
+Onderzoek de invloed van $K$ op de bias van $CV^K$ voor $N=400$, $n=3$ en $K=1,\ldots,15$
 
 \subsection*{Opgave 2(l)}\label{sub:opg2l}
 \addcontentsline{toc}{subsection}{Opgave 2(l)}
-Vergelijk de bias van de drie methodes (random split, LOOCV, K-fold) en verklaar.
+Vergelijk de bias van de drie methodes (random split, LOOCV, K-fold)
 
 \subsection*{Opgave 2(m)}\label{sub:opg2m}
 \addcontentsline{toc}{subsection}{Opgave 2(m)}
-Maak een figuur van de variantie voor de berekeningen in Opgave 2(k).
+figuur van de variantie voor de berekeningen in Opgave 2(k)
 
 \subsection*{Opgave 2(n)}\label{sub:opg2n}
 \addcontentsline{toc}{subsection}{Opgave 2(n)}
-Schrijf een korte eindconclusie over de bevindingen rond logistische regressie.
+korte eindconclusie rond logistische regressie.
 
 
 
