@@ -1,0 +1,193 @@
+\chapter{Arnoldi-iteraties voor eigenwaarden-benadering}
+inleiding tot het Arnoldi theorie deel van verslag
+
+\subsection*{Opgave 1(a)}\label{sub:opg1a}
+\addcontentsline{toc}{subsection}{Opgave 1(a)}
+
+\textbf{Gegeven:} Voor een bepaalde iteratie $j$ is de norm van de georthogonaliseerde vector $\tilde v_j$ nul.
+
+\begin{enumerate}
+    \item Is er een boven- en ondergrens voor $j$? Voor welke niet-nul vector $b$ wordt elk van deze grenzen bereikt?
+
+    \item Toon aan dat in dit geval $K_j$ een invariante deelruimte is van $A$.
+
+    \item Geef kort aan onder welke voorwaarden $A K_j \subseteq K_j$ van toepassing is.
+
+    \item Toon aan dat in dit geval $K_j = K_{j+1} = K_{j+2} = \ldots$.
+
+    \item Toon aan dat in dit geval alle eigenwaarden van $H_j$ ook eigenwaarden van $A$ zijn.
+
+    \item Toon aan dat in dit geval en voor $\det(A) \neq 0$ de oplossing van $Ax=b$ in $K_j$ ligt.
+
+    
+\end{enumerate}
+
+\subsection*{Opgave 1(b)}\label{sub:opg1b}
+\addcontentsline{toc}{subsection}{Opgave 1(b)}
+Toon aan dat $K_m(A,b)=K_{m+1}(A,b)$. Wat kun je dan zeggen over de convergentie van de Arnoldi-iteratie?
+
+\subsection*{Opgave 1(c)}\label{sub:opg1c}
+\addcontentsline{toc}{subsection}{Opgave 1(c)}
+Beschouw de $(m \times m)$-matrix. IK SNAP NIET HELEMAAL HOE DIE ER NU UIT ZIET, WAAR ZIJN ALLEMAAL 1'EN EN WAAR 0'EN?
+
+\begin{enumerate}
+    \item Wat zijn de eigenwaarden en -vectoren van $A$?
+
+    \item Stel dat $b=e_1$. Geef een uitdrukking voor de Krylovruimte $K_j(A,b)$ met $1 \leq j < m$.
+
+    \item Stel dat $m$ groot is. Verwacht je dat voor $b=e_1$ de Arnoldi-iteratie snel convergeert naar de eigenwaarden en eigenvectoren van $A$? Geef twee argumenten.
+
+    \item In welke mate is het Arnoldi-algoritme geschikt voor het benaderen van eigenwaarden van $A$?
+
+    
+\end{enumerate}
+
+
+\chapter{Classificatie en kruisvalidatie}
+In dit deel wordt een binair classificatieprobleem uitgewerkt. Eerst wordt het model geformuleerd en numeriek opgelost met Gradient Descent. Vervolgens wordt de modelkeuze onderzocht met verschillende vormen van kruisvalidatie. Deze resultaten worden tot slot analyseert in termen van bias-variantie.
+
+\subsection*{Opgave 2(a)}\label{sub:opg2a}
+\addcontentsline{toc}{subsection}{Opgave 2(a)}
+Wat is het expliciete voorschrift van de gradi"ent? Wat zou je doen als de gradi"ent geen analytisch voorschrift had?
+
+Voor
+\[
+J(\beta)=\frac{1}{N}\sum_{i=1}^{N}\log\!\big(1+\exp(-b_i\beta^\top a_i)\big)
+\]
+met $a_i\in\mathbb{R}^n$ en $b_i\in\{-1,1\}$ geldt
+\[
+\nabla J(\beta)= -\frac{1}{N}\sum_{i=1}^{N}\frac{b_i a_i}{1+\exp(b_i\beta^\top a_i)}.
+\]
+Equivalent in matrixvorm:
+\[
+\nabla J(\beta)= -\frac{1}{N}A^\top\!\left(\frac{b}{1+\exp\!\left(\operatorname{diag}(b)A\beta\right)}\right),
+\]
+waar de exponent en deling elementgewijs worden geïnterpreteerd.
+
+Indien geen analytisch voorschrift beschikbaar is, kan de gradi"ent numeriek benaderd worden met centrale eindige verschillen:
+\[
+\frac{\partial J}{\partial \beta_j}(\beta)\approx
+\frac{J(\beta+h e_j)-J(\beta-h e_j)}{2h}.
+\]
+Deze aanpak is algemeen toepasbaar, maar vereist extra functie-evaluaties en een zorgvuldige keuze van $h$.
+
+\subsection*{Opgave 2(b)}\label{sub:opg2b}
+\addcontentsline{toc}{subsection}{Opgave 2(b)}
+Beschrijf en motiveer de Matlab-implementatie van Gradient Descent: stapgrootte, convergentiecriterium en aantal convergentiestappen.
+
+De implementatie is opgenomen in \texttt{GD.m} met de gevraagde functieheader. De iteratie is
+\[
+x_{k+1}=x_k-\alpha_k\nabla f(x_k).
+\]
+Als initiële stapgrootte wordt een vaste waarde gebruikt, gevolgd door backtracking (Armijo-voorwaarde). Daardoor blijft de methode bruikbaar voor functies met verschillende schaal en kromming, zonder handmatige herafstemming per probleem.
+
+Als stopcriteria worden gecombineerd:
+\[
+\|\nabla f(x_k)\|_2 \leq \varepsilon_g,
+\qquad
+\|x_{k+1}-x_k\|_2 \leq \varepsilon_x\,(1+\|x_k\|_2),
+\]
+naast een bovengrens op het aantal iteraties. Dit voorkomt zowel vroegtijdig stoppen als oneindig dooritereren.
+
+Het aantal convergentiestappen is probleemafhankelijk en wordt beïnvloed door conditionering, startpunt en gekozen parameters. Met backtracking is doorgaans een stabiele daling van de doelfunctie observeerbaar, maar zonder globale line-search-optimaliteit blijft een uniforme a-priorigrens op het aantal stappen in het algemeen afwezig.
+
+\subsection*{Opgave 2(c)}\label{sub:opg2c}
+\addcontentsline{toc}{subsection}{Opgave 2(c)}
+Leg uit hoe model (3) relateert aan model (2).
+
+\subsection*{Opgave 2(d)}\label{sub:opg2d}
+\addcontentsline{toc}{subsection}{Opgave 2(d)}
+Bepaal modellen voor $n=0,\ldots,5$ met alle data. Voeg zes figuren toe met:
+\begin{itemize}
+    \item datapunten (klasse $1$ in blauw, klasse $-1$ in rood),
+    \item scheidingsgrens $p=1/2$,
+    \item aantal fout geclassificeerde punten per model.
+\end{itemize}
+
+\subsection*{Opgave 2(e)}\label{sub:opg2e}
+\addcontentsline{toc}{subsection}{Opgave 2(e)}
+Maak een figuur van de kruisvalidatiefout in functie van $n$ voor $n=1,\ldots,20$ (random train/test split).
+
+\subsection*{Opgave 2(f)}\label{sub:opg2f}
+\addcontentsline{toc}{subsection}{Opgave 2(f)}
+Herhaal Opgave 2(e) vijf keer met andere random testverzamelingen.
+
+\subsection*{Opgave 2(g)}\label{sub:opg2g}
+\addcontentsline{toc}{subsection}{Opgave 2(g)}
+Bereken $CV^{\mathrm{LOO}}$ voor $n=1,\ldots,12$ en bespreek welk model de voorkeur heeft.
+
+\subsection*{Opgave 2(h)}\label{sub:opg2h}
+\addcontentsline{toc}{subsection}{Opgave 2(h)}
+Implementeer 10-fold cross-validatie en bereken de fout voor $n=1,\ldots,20$.
+
+\subsection*{Opgave 2(i)}\label{sub:opg2i}
+\addcontentsline{toc}{subsection}{Opgave 2(i)}
+Herhaal Opgave 2(h) vijf keer met geschudde data.
+
+\subsection*{Opgave 2(j)}\label{sub:opg2j}
+\addcontentsline{toc}{subsection}{Opgave 2(j)}
+Onderzoek de invloed van datasetgrootte op bias en variantie van de LOOCV-schatter met samples uit \texttt{BigDatasetCV.mat}.
+
+\subsection*{Opgave 2(k)}\label{sub:opg2k}
+\addcontentsline{toc}{subsection}{Opgave 2(k)}
+Onderzoek de invloed van $K$ op de bias van $CV^K$ voor $N=400$, $n=3$ en $K=1,\ldots,15$.
+
+\subsection*{Opgave 2(l)}\label{sub:opg2l}
+\addcontentsline{toc}{subsection}{Opgave 2(l)}
+Vergelijk de bias van de drie methodes (random split, LOOCV, K-fold) en verklaar.
+
+\subsection*{Opgave 2(m)}\label{sub:opg2m}
+\addcontentsline{toc}{subsection}{Opgave 2(m)}
+Maak een figuur van de variantie voor de berekeningen in Opgave 2(k).
+
+\subsection*{Opgave 2(n)}\label{sub:opg2n}
+\addcontentsline{toc}{subsection}{Opgave 2(n)}
+Schrijf een korte eindconclusie over de bevindingen rond logistische regressie.
+
+
+
+
+
+
+
+
+
+\clearpage
+\chapter{Gebruik van GenAI -> DIT MOET NOG AANGEPAST WORDEN NAAR WAT WIJ GEBRUIKT HEBBEN!!!}
+
+Tijdens de uitwerking van dit project werd in beperkte mate gebruikgemaakt van generatieve artificiële intelligentie (GenAI), voornamelijk ter ondersteuning van verslagstructuur, formulering en syntaxadvies. AI werd uitsluitend gebruikt als hulpmiddel, waarbij alle gegenereerde output kritisch geëvalueerd en handmatig aangepast werd door het projectteam. De uiteindelijke inhoud en formuleringen zijn volledig bepaald door de auteurs van dit verslag.
+
+De voornaamste gebruikte GenAI-modellen waren:
+\begin{itemize}
+    \item \textbf{Copilot} – gebruikt om geschreven teksten van het verslag na te kijken en verbeteren maar vooral hulp bij \textsc{Matlab}- en \LaTeX{}-syntax te bieden, zowel als suggesties voor te stellen voor foutopsporing tijdens debugging van \textsc{Matlab}-code.
+    \item \textbf{ChatGPT} – incidenteel geraadpleegd (aanvullend ingezet) vooral voor verwoording en algemene formulering. Daarnaast voor ook voor opzoekwerk en eventuele extra uitleg rondom de onderwerpen van de opgave.
+\end{itemize}
+
+Onderstaande tabel \ref{tabel_GenAI} geeft een overzicht van de domeinen waarin GenAI al dan niet werd gebruikt:
+
+\begin{table}[H]
+    \centering
+    \caption{Toepassingen van GenAI tijdens het project}
+    \begin{tabular}{|p{8cm}|c|}
+        \hline
+        \textbf{Toepassingsdomein} & \textbf{GenAI gebruikt} \\
+        \hline
+        Schrijven van eigenlijke projectcode (algoritmen en implementatie) & Nee \\
+        \hline
+        Debugging van \textsc{Matlab}-code (Copilot, ChatGPT) & Ja \\
+        \hline
+        Syntaxhulp voor \LaTeX{}-notatie (Copilot, ChatGPT) & Ja \\
+        \hline
+        Inhoudelijke analyse of wiskundige bewijzen & Nee \\
+        \hline
+        Schrijven van de kern van de tekst en de grote lijnen van het verslag & Nee \\
+        \hline
+        Geschreven tekst corrigeren en verbeteren (Copilot, ChatGPT) & Ja \\
+        \hline
+        Eindredactie en validatie van inhoud en formulering & Nee \\
+        \hline
+    \end{tabular}
+    \label{tabel_GenAI}
+\end{table}
+
+Het projectteam draagt de volledige verantwoordelijkheid voor de inhoud van dit verslag. AI werd uitsluitend gebruikt als ondersteunend instrument, zonder afbreuk te doen aan de eigen bijdrage, analyse en inzichten. Alle gegenereerde inhoud werd door het projectteam kritisch bekeken en gecontroleerd.

@@ -1,0 +1,203 @@
+
+Numerieke benadering met toepassing in datawetenschappen Practicum 2
+
+Fr´ed´eric Blondeel, Jasper Visterin Maart 2026
+
+1 Arnoldi-iteraties voor eigenwaarden-benadering
+Zoals in de cursus wordt besproken, bepaalt de methode van Arnoldi een orthogonale basis q1, · · · , qj van
+Kj(A, b) = {b, Ab, A^2b, · · · , A^(j-1)b}.
+Men start met de genormaliseerde vector q1 = b/||b||. Om dan de volgende vector in de orthogonale basis te bekomen, wordt vj = Aqj georthogonaliseerd ten opzichte van de reeds geconstrueerde basis q1, . . . , qj. Hierbij wordt v~j bekomen. Na normalisatie van v~j verkrijgt men de volgende basisvector qj+1. Tijdens dit proces, dat gebaseerd is op het Gram-Schmidt-algoritme, worden de projectie-coefficiënten opgeslagen in een Hessenberg-matrix.
+De eigenwaarden van deze matrix, de zogenaamde Ritz-waarden, vormen benaderingen voor de eigenwaarden van A. De methode van Arnoldi is vooral geschikt indien de matrix A heel groot is (en bijvoorbeeld ijl) en we slechts een paar eigenwaarden van A willen kennen.
+
+Veronderstel dat de methode van Arnoldi wordt uitgevoerd voor een zekere diagonaliseerbare matrix A in R^(m x m)
+en vector b in R^m. Los de volgende oefeningen op.
+
+(a) Stel dat, voor een bepaalde iteratie j, de norm van de vector v˜j (vj na orthogonalisatie) nul is.
+1. Is er een boven- en ondergrens voor j? Voor welke niet-nul vector b wordt elk van deze grenzen bereikt?
+2. Toon aan dat in dit geval Kj een invariante deelruimte is van A (zie definitie cursus).
+3. Voor dit geval, geef kort aan onder welke voorwaarden A K_j subseteq K_j van toepassing is.
+3. Toon aan dat in dit geval Kj = Kj+1 = Kj+2 = . . ..
+4. Toon aan dat in dit geval alle eigenwaarden van Hj ook eigenwaarden van A zijn.
+5. Toon aan dat in dit geval en voor det(A) != 0 dat de oplossing van Ax = b in K_j ligt.
+(b) Toon aan dat Km(A, b) = Km+1(A, b). Wat kun je dan zeggen over de convergentie van de Arnoldi-iteratie?
+(c) Beschouw de (m x m)-matrix met enen op de nevendiagonaal en nullen elders,
+bijvoorbeeld van de vorm
+[0 ... 0 1;
+ ... ;
+ 1 0 ... 0]
+1. Wat zijn de eigenwaarden en -vectoren van A?
+Hint: Bekijk wat voor een soort matrix A is.
+2. Stel nu dat b = e1, de eerste kolom van de identiteitsmatrix. Geef een uitdrukking voor de Krylovruimte Kj(A, b) met 1 <= j < m.
+
+3. Stel dat m een groot getal is. Verwacht je dat, voor b = e1, de Arnoldi-iteratie snel zal convergeren naar de eigenwaarden en eigenvectoren van A? Geef twee argumenten op basis van je antwoorden op
+1. en 2.
+Hint: Voor één van je argumenten kan je je baseren op het feit dat de fout bij het benaderen van de
+i-de eigenvector xi in iteratie j gerelateerd is aan het getal ||(I - QjQj*)xi||_2.
+4. In welke mate is het Arnoldi-algoritme geschikt voor het benaderen van eigenwaarden van A?
+
+
+2 Classificatie en kruisvalidatie
+
+Introductie Beschouw het volgende classificatieprobleem. Gegeven is een verzameling met input-outputdata D = {(ai, bi), i = 1 . . . N}. De inputs zijn vectoren ai in R^n, en de output bi is binair: -1 of 1. De vectoren worden dus geclassificeerd in één van twee klassen volgens een classificatiefunctie C, met C(ai) = bi. Een praktisch voorbeeld van een dergelijk probleem zou een dataset kunnen zijn met patiëntdata voor darmkanker. De ai bevatten dan gemeten waardes horende bij patiënt i, en bi identificeert de tumor als goed-
+(1) of kwaadaardig (-1). Het doel is dan een model C te fitten dat, gegeven een nieuwe pati¨ent met waardes
+a˜, ons vertelt of de tumor goed- of kwaadaardig is. We stellen het volgende model voor de kans dat een vector
+inputdata a correspondeert met de classificatie b:
+1
+p_beta(a, b) = 1/(1 + exp(-b*(beta^T a))),	(1)
+waar beta in R^n de modelparameters voorstelt die we wensen te schatten. Uiteraard verwachten we dat elke input wordt gelinkt aan een output. Dus voor een vaste a dienen we een Bernoulliverdeling te bekomen, i.e. p_beta(a, -1) + p_beta(a, 1) = 1 (verifieer snel even voor jezelf dat dit het geval is). Eenmaal het model bekomen zullen we a~ beschouwen als goedaardig als p_beta(a~, 1) afrondt op 1 (i.e. C(a~) = 1), of kwaadaardig als p_beta(a~, -1) afrondt op 1 (i.e. C(a~) = -1). Uiteraard rondt p_beta(a~, -1) af op 1 als en slechts als p_beta(a~, 1) afrondt op 0. Het volstaat dus om de functie
+
+
+
+te beschouwen.
+
+1
+p_beta(a) = 1/(1 + exp(-beta^T a))	(2)
+
+We willen natuurlijk dat ai correspondeert met bi. Dit betekent dat we de kans p_beta(ai, bi) hoog wensen. We zouden de modelparameters beta kunnen vinden door bovenstaand fitting-probleem te formuleren als een optimalisatieprobleem. Veronderstel dat de datapunten statistisch onafhankelijk zijn, dan kunnen we dit formuleren via maximum likelihood estimation (meest aannemelijke schatter). We maximaliseren de kans
+
+N
+max	p_beta(ai, bi),
+beta in R^n
+i=1
+
+
+hetgeen equivalent is aan
+
+min (1/N) sum_i log(1 + exp(-b_i*(beta^T a_i))).
+
+
+
+
+We kunnen dit probleem oplossen met de methode van de (stochastische) steilste afdaling of meer geavanceerde optimalisatie methodes. Gegeven dat de dataset niet zeer groot is volstaat het om een simpele steilste afdaling methode te gebruiken.
+
+(a) Wat is het expliciete voorschrift van de gradi¨ent? Wat zou je doen als de gradi¨ent nu g´e´en analytisch voorschrift had?
+(b) Schrijf een Matlab functie die Gradient Descent (steilste afdaling) implementeert. Hoe kies je de stap- grootte? Wat is je convergentie criterium? Wat kun je zeggen over het aantal convergentie stappen? Wees zo compleet mogelijk.
+
+De data en het model  Op Toledo vind je DatasetCV.mat dat de beschouwde data bevat. De vectoren
+a = (x1, x2) liggen in het vlak R2. We zullen een veralgemening van model (2) fitten. Deze heeft de vorm
+
+log(p/(1 - p)) = beta_0 + beta_1 x_1 + beta_2 x_2 + ... + beta_(2n-1) x_1^n + beta_(2n) x_2^n.	(3)
+
+We gebruiken dus enkel monomialen.
+
+(c) Leg uit op welke manier model (3) relateert aan model (2).
+(d) Bepaal eerst verschillende modellen voor n = 0 . . . 5, waar je gebruik maakt van alle data. Maak zes figuren die de datapunten bevatten. Groep (1) wordt afgebeeld in het blauw, en groep (-1) in het rood (volgens de echte classificatie). De logistische regressie bepaalt een scheidingswand tussen de twee groepen, daar waar p = 1/2. Voeg deze scheiding toe aan je figuren. Vermeld hoeveel punten verkeerd worden geclassificeerd in elk model.
+
+Tip: Zorg dat je figuren goed leesbaar en makkelijk interpreteerbaar zijn. Schenk hier ook later in het prac- ticum aandacht aan!
+Tip: Maak helper functies om de verschillende matrices op te stellen en de veelterm (3) makkelijk te evalueren. Het is a priori niet duidelijk hoe we n dienen te kiezen. Een te grote n kan leiden tot overfitting; een te lage
+n kan dan weer aanleiding geven tot een model dat niet voldoende sterk is. De keuze is essentieel gezien het belangrijk is dat we bijkomende data in de toekomst correct kunnen classificeren.
+
+Aanpak 1: at random gekozen testdata Splits de data op in twee even grote groepen, i.e. D = Tr U Te. Doe dit at random. Bepaal vervolgens je modelparameters beta op basis van de groep Tr. Dit leidt tot een classificatiefunctie C : R^2 -> {-1, 1}. Je test daarna je bekomen model aan de hand van de testdata Te. De kruisvalidatiefout(ratio) CVn is het aantal punten uit de testgroep die foutief geclassificeerd worden door het
+bekomen model, genormaliseerd ten opzichte van het totale aantal punten:
+CV (C) =  1  L 1 |C(a) - C(a)|.
+
+n	|Te|
+
+2
+a in Te
+
+
+(e) Maak een figuur van de kruisvalidatiefout in functie van n voor n = 1 . . . 20. Wat concludeer je? Welk model prefereer je?
+(f) Doe dit nog vijf keer, weeral telkens voor een andere at random gekozen testverzameling. Maak een figuur die al deze CV's bevat. Wat merk je op?
+
+Aanpak 2: LOOCV Een alternatieve methode om de prestaties van ons model te evalueren, is Leave-One- Out Cross-Validation (LOOCV). Hierbij wordt het model getraind op alle datapunten behalve ´e´en, waarna het wordt getest op dat ene achtergehouden datapunt. Dit proces wordt herhaald voor elk datapunt. We noteren de bekomen classificatiefunctie bij achterhouding van het punt a als Ca. De LOOCV-kruisvalidatiefout is dan het gemiddelde van de modelfouten:
+
+CV LOO =  1
+
+L CV (C ).
+
+
+
+(g) Bereken CV LOO voor n = 1 . . . 12 en maak een figuur. Analyseer en trek conclusies over welk model de voorkeur verdient op basis van LOOCV.
+
+Aanpak 3: K-voudige kruisvalidatie Een derde manier om het model te selecteren is K-voudige kruisvali- datie (of K-Fold Cross Validation). Bij KFCV wordt de dataset opgedeeld in K gelijke delen of "vouwen". Het model wordt vervolgens K keer getraind en gevalideerd, waarbij telkens een andere vouw als testverzameling wordt gebruikt en de overige vouwen als trainingsset dienen. We bekomen zo K classificatiefuncties Ck, met k = 1 . . . K, en kruisvalidatiefout
+
+CV K =  1
+
+L CV (C ).
+
+
+
+(h) Implementeer KFCV voor K = 10 (10-Fold). Bereken de kruisvalidatiefout voor elk model met graad n = 1 . . . 20. Maak een figuur van de KFCV-kruisvalidatiefout in functie van n. Analyseer en trek conclusies over welk model de voorkeur verdient op basis van KFCV.
+(i) Doe dit nog vijf keer, telkens de originele data te schudden. Maak een figuur die deze CV's bevat. Wat merk je op?
+
+Bias en variantie Laat ons het in deze context even hebben over de bias en variantie van onze schattingen (voor de kruisvalidatiefout). Onze data zijn gesampled uit een achterliggende (ongekende) statistische verdeling en het classificatieprobleem heeft een achterliggende "echte" oplossing. Ten opzichte van deze verdeling en die
+echte oplossing kunnen we de "echte" kruisvalidatiefout CVn defini¨eren waarvoor CVn(C), CV LOO en CV K
+n	n
+slechts schattingen zijn. Merk op dat onze methodes een pessimistische schatting maken van de prestaties van
+het beschouwde model omdat de meeste statistische modellen verbeteren als de trainingsset groter wordt.
+De bias van onze schattingen is de verwachte waarde van het verschil tussen de schatter en CVn: de systematische fout die wordt ge¨introduceerd door een schatter (model) dat niet in staat is om de ware relatie tussen kenmerken en het doel nauwkeurig te modelleren. Een hoge bias wijst op underfitting.
+Anderzijds is ook de variantie van de schatter belangrijk. Als de dataset (licht) wijzigt is het wenselijk dat de schatter voldoende rigide is ten opzichte van deze wijzigingen. Indien de schatter wel te veel verandert betekent dit dat statistische ruis en individuele datapunten een te grote invloed hebben op de waarde van de schatter. Een hoge variantie wijst op overfitting.
+We zien dus dat er bij (ingewikkelde) schatters/modellen een trade-off kan voorkomen tussen bias en variantie,
+i.e. een keuze voor een unbiased schatter kan leiden tot een hogere variantie, en vice versa.
+
+(j) We gaan de invloed van de grootte van de dataset na op de bias en variantie van de LOOCV-schatter. Op Toledo vind je ook een grotere representatieve dataset BigDatasetCV.mat voor hetzelfde probleem. Beschouw de schatter CV LOO. Voor N = 10 + 20i, i = 1 . . . 19, sample je 50 keer een dataset van grootte N uit deze dataset. Pas hierop LOOCV toe en bepaal de schatter voor deze samples. Je maakt dan twee figuren: (1) ´e´en die de gemiddelde kruisvalidatiefout weergeeft op de y-as en de grootte van de dataset N op de x-as; (2) ´e´en die de variantie weergeeft op de y-as en de grootte van de dataset N op de x-as. Bespreek en interpreteer kort je figuren.
+(k) We gaan ook na op welke manier de bias van CV K be¨invloed wordt door K. Neem N = 400, n = 3 en
+K = 1 . . . 15. Voor elke K neem je 200 keer een sample van grootte N . Bereken daarvoor telkens CV K.
+Maak opnieuw een figuur, nu met de gemiddelde kruisvalidatiefout op de y-as en K op de x-as.
+(l) Vergelijk de bias van onze drie methodes. Bespreek aan de hand van de figuur in (k) en verklaar.
+
+We merken op dat het mogelijk is de bias van de methodes te bespreken en vergelijken. Een algemene beschrijving en vergelijking van de variantie is moeilijker en onderwerp van wetenschappelijk debat. De nieuwsgierige en googelende student zal merken dat vaak wordt gesteld dat de variantie het hoogst is voor LOOCV en lager voor KFCV. Dit statement is echter een incorrecte veralgemening van een speciaal geval.
+
+(m) Maak ook een figuur van de variantie voor je berekeningen in (k). Je zal zien dat de variantie geen consistent dalend of stijgend gedrag vertoont.
+(n) Schrijf een korte conclusie met je bevindingen betreffende logistische regressie.
+
+3 Praktische schikkingen
+
+Samenwerken Het practicum wordt gemaakt in groepjes van twee. Zoekertjes kunnen geplaatst worden op het daarvoor voorziene forum op toledo. Indien je het practicum alleen wilt maken, hoef je de volgende opdrachten niet te maken: Arnoldi (a)3., Arnoldi (c)4., Classificatie (c), Classificatie (l), Classificatie (m).
+
+Indienen Het verslag en de code worden ingediend op toledo. Er zal een indienlink worden opengesteld. Het practicum wordt onder volgende vorm ingediend door exact ´e´en van de groepsleden: Het verslag en de code worden onder volgende vorm door (exact) ´e´en van de leden ingediend:
+
+• Het verslag is maximaal negen paginas.
+• Alles is omvat in een ZIP-bestand met als naam NaamGroepslid1NaamGroepslid2.zip (bijvoorbeeld
+WimMichielsGiovanniSamaey.zip).
+• Het verslag is een PDF-bestand met als naam NaamGroepslid1NaamGroepslid2.pdf.
+• Je dient de volgende m-file ook in:
+- GD.m. Je implementatie van je Gradient Descent code. Deze moet worden opgeroepen met de volgende signature:
+function [x,step] = GD(func, Dfunc, x0, param1, param2, ...) if nargin==3
+param1=Default1; param2=Default2;
+...
+end
+waar x de oplossing is, step de stap waarin het algoritme stopt, func en Dfunc function handles zijn voor de functie en zijn gradi¨ent en x0 de initi¨ele gok is. paramN zijn de eventuele parameters die jouw implementatie gebruikt en waar default waarden aan gekoppeld zijn. Bij voorbeeld, als je enige extra parameter de stapgrootte is en je de beste resultaten krijgt met 1 is dan ziet je implementatie er als volgt uit:
+function [x,step] = GD(func, Dfunc, x0, step_size) if nargin==3
+  step_size=1; end
+...
+Je mag paramN en de default waarden zelf kiezen maar zouden in het algemeen goede resultaten moeten geven, ook voor andere functies! Je mag voor het maken van je figuren uiteraard afwijken van deze default waarden maar vermeld dit in je verslag.
+
+Het is mogelijks meermaals in te dienen. In dat geval wordt enkel de laatste inzending gequoteerd.
+
+Data De deadline is woensdag 13/5/26, 23u59. Op Toledo zal je een indienlink vinden.
+
+Quotering  Houd er rekening mee dat tijdens de beoordeling onder andere volgende zaken gequoteerd worden:
+
+• De inhoudelijke kwaliteit van je antwoorden.
+• De kwaliteit van je figuren: Je denkt na over je assen (logaritmisch, lineair). Je voegt een legende toe. Assen hebben een label, etc.1
+
+1Dit punt is essentieel. Wetenschappelijke communicatie aan de hand van gebrekkige figuren is waardeloos/onbruikbaar.
+
+• De kwaliteit van de code: Zorg dat de code leesbaar is (bijv. inspringen van de inhoud van een for-lus, logische namen voor je variabelen, geen overbodige bewerkingen, etc.).
+• De kwaliteit van je verslag. Zorg dat je een net en leesbaar verslag indient (zie ook "Suggesties verslag").
+• Vooraleer de practica nagekeken kunnen worden is wat administratief werk noodzakelijk. Daarom is het van belang dat 1) de richtlijnen onder indienen tot op de letter worden gevolgd; 2) de functieheader van de te schrijven matlabfunctie tot op de letter worden gevolgd.
+Omdat het voor sommigen blijkbaar heel moeilijk is zich aan deze instructies te houden, zijn wij helaas genoodzaakt punten af te trekken als dit niet het geval is.
+
+Suggesties verslag
+
+• Je hoeft geen inleiding/conclusie te schrijven. Je verslag mag gerust uit "onafhankelijke" paragrafen bestaan die op de verschillende opdrachten antwoord bieden. Antwoord volledig, maar ook to-the-point.
+• Je mag verwijzen naar de cursustekst en de opgave. Voor de rest is je verslag een op zichzelf staand geheel. Twee voorbeelden: 1) Als je de klassieke GS implementeert volgens een stukje code in de cursustekst, dan hoef je dit niet over te nemen in je verslag en kan je gewoon refereren. 2) Als je een stelling argumenteert aan de hand van een figuur die je zelf hebt gemaakt, dan dien je deze figuur op te nemen in je verslag.
+• Je notatie is consistent met die gebruikt in de opgave en cursustekst. Nieuwe notatie dien je zelf in te voeren.
+• Je schrijft in volzinnen. Een afleiding met formules wordt bijvoorbeeld voorafgegaan door (minstens) ´e´en inleidende volzin. Houd je zinnen kort en leesbaar.
+• Exporteer figuren als eps- of pdf-figuren (deze verliezen geen detail bij inzoomen).
+
+GenAI Voeg een sectie toe aan je verslag waarin je vermeldt of je GenAI hebt gebruikt, hoe en waar je dit hebt gedaan, en welke GenAI-assistent je hebt geraadpleegd. De richtlijnen van KU Leuven zijn hier te   vinden:    https://www.kuleuven.be/onderwijs/student/onderwijstools/artificiele-intelligentie. Veel succes!
+
+
+                        Veel succes! Giovanni, Wim, Klaas, Jasper, Fr´ed´eric
+
+
+
+Fr´ed´eric Blondeel
+frederic.blondeel@kuleuven.be
+Jasper Visterin
+jasper.visterin@kuleuven.be
+
+

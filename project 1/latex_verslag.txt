@@ -22,7 +22,7 @@ A_{i,k+1}=p_k(x_i),\quad i=1,\ldots,N,\;k=0,\ldots,n,
 B_{j,l+1}=q_l(y_j),\quad j=1,\ldots,M,\;l=0,\ldots,m.
 \] Neem daarnaast $C\in\mathbb{R}^{(m+1)\times(n+1)}$ als de co\"{e}ffici\"{e}ntenmatrix met $C_{l+1,k+1}=c_{kl}$. Dan geldt elementgewijs
 \[
-(BCA^T)_{j,i}=\sum_ {l=0}^{m}\sum_{k=0}^{n} c_{kl}\,q_l(y_j)p_k(x_i)=z(x_i,y_j).
+(BCA^\top)_{j,i}=\sum_ {l=0}^{m}\sum_{k=0}^{n} c_{kl}\,q_l(y_j)p_k(x_i)=z(x_i,y_j).
 \] 
 Dus de benaderde roosterwaarden worden gegeven door de matrix $Z=BCA^\top$.
 
@@ -91,7 +91,7 @@ Bovendien is $\Sigma_A\otimes\Sigma_B$ een diagonaalmatrix. Uit de definitie van
 \[
 (A\otimes B)^+=(V_A\otimes V_B)(\Sigma_A\otimes\Sigma_B)^+(U_A\otimes U_B)^\top.
 \] 
-Er is net bewezen dat $\Sigma_A \otimes \Sigma_B$ een diagonaalmatrix is. De pseudo-inverse van een diagonaalmatrix wordt berekend door de niet-nul elementen op de diagonaal te inverteren. Die bewerking komt dus overeen met de normale inverse. Hierdoor geldt de eigenschap $(X \otimes Y)^{-1} = X^{-1} \otimes Y^{-1}$ ook voor de pseudo-inverse van deze diagonaalmatrices. Door dit toe te passen, en daarna de mixed-product eigenschap, volgt dat
+Er is net bewezen dat $\Sigma_A \otimes \Sigma_B$ een diagonaalmatrix is. De pseudo-inverse van een diagonaalmatrix wordt berekend door de niet-nul diagonaalelementen te inverteren. Die bewerking komt voor die elementen dus overeen met de normale inverse. Hierdoor geldt de eigenschap $(X \otimes Y)^{-1} = X^{-1} \otimes Y^{-1}$ ook voor de pseudo-inverse van deze diagonaalmatrices. Door dit toe te passen, en daarna de mixed-product eigenschap, volgt dat
 \[
 (A\otimes B)^+=(V_A\otimes V_B)(\Sigma_A^+\otimes\Sigma_B^+)
 (U_A\otimes U_B)^\top
@@ -118,7 +118,7 @@ Dit is de gezochte uitdrukking.
 
 \subsection*{Opgave 4}
 \addcontentsline{toc}{subsection}{Opgave 4}
-Voor de validatie van de implementatie is een test gebruikt waarvoor de exacte oplossing gekend is. Eerst werd een co"{e}ffici"{e}ntenmatrix $C_{\text{true}}$ gekozen, daarna zijn de bijhorende data op het rooster opgebouwd via
+Voor de validatie van de implementatie is een test gebruikt waarvoor de exacte oplossing gekend is. Eerst werd een co"{e}ffici"{e}ntenmatrix $C_{\text{true}}$ gekozen. Daarna zijn de bijhorende data op het rooster opgebouwd via
 \[
 F = B\,C_{\text{true}}\,A^\top.
 \]
@@ -138,23 +138,25 @@ Alle maten liggen op machineprecisie. Dat bevestigt dat de opbouw van $A$ en $B$
 \subsection*{Opgave 5} \label{sub:opgave5}
 \addcontentsline{toc}{subsection}{Opgave 5}
 
-De twee datasets op het $31 \times 31$-rooster zijn benaderd met maximale veeltermgraad $n=m=7$. Het benaderende oppervlak met bijhorende matrix $Z$ is berekend met $Z = B C A^\top$, aangezien in \hyperref[sub:opgave1]{Opgave~1} aangetoond is dat dit equivalent is. Dit is eveneens effici\"{e}nter. De reden daarvoor is dat $\Gamma = A \otimes B$ een $961\times64$ matrix is, want $A$ en $B$ hebben dimensie $31\times8$. Bovendien wordt die grote matrix nadien nog vermenigvuldigd met de vector $c$ om $z = \Gamma c$ te berekenen. Dit vereist meer rekenkracht en geheugen dan de eerste manier, want die vermenigvuldigt slechts matrices van dimensie $31 \times 8$ en $8 \times 8$.
+De twee datasets op het $31 \times 31$-rooster zijn benaderd met maximale veeltermgraad $n=m=7$. Het benaderende oppervlak met bijhorende matrix $Z$ is berekend met $Z = B C A^\top$, aangezien in \hyperref[sub:opgave1]{Opgave~1} aangetoond is dat dit equivalent is. Dit is eveneens effici\"{e}nter. De reden daarvoor is dat $\Gamma = A \otimes B$ een $961\times64$-matrix is, want $A$ en $B$ hebben dimensie $31\times8$. Bovendien wordt die grote matrix nadien nog vermenigvuldigd met de vector $c$ om $z = \Gamma c$ te berekenen. Dit vereist meer rekenkracht en geheugen dan de eerste manier, want die vermenigvuldigt slechts matrices van dimensie $31 \times 8$ en $8 \times 8$.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.58\textwidth]{Figuren/opgave5exp.eps}
-    \caption{Bivariate veeltermbenadering met graad $n=m=7$ van de exponenti\"{e}le doelfunctie (Dataset 1).}    \label{fig:opgave5exp}
-\end{figure}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.58\textwidth]{Figuren/opgave5membrane.eps}
-    \caption{Bivariate veeltermbenadering met graad $n=m=7$ van de ‘Matlabfunctie’ (\texttt{membrane}-functie) (Dataset 2).}
-    \label{fig:opgave5membrane}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figuren/opgave5exp.eps}
+        \caption{Veeltermbenadering ($n=m=7$) van Dataset 1 (exponentieel).}
+        \label{fig:opgave5exp}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figuren/opgave5membrane.eps}
+        \caption{Veeltermbenadering ($n=m=7$) van Dataset 2 (\texttt{membrane}).}
+        \label{fig:opgave5membrane}
+    \end{minipage}
 \end{figure}
 
-Figuur \ref{fig:opgave5exp} en Figuur \ref{fig:opgave5membrane} tonen de veeltermoppervlakken en de originele datapunten van respectievelijk de exponenti\"{e}le functie  $f_{ij} = \exp(1 - (2.5x_i)^2 - (2y_j)^2)$  (Dataset 1) en de \texttt{membrane}-functie (Dataset 2). Figuur \ref{fig:opgave5exp} toont dat de bivariate veelterm de exponenti\"{e}le functie goed benadert.
-
-De \texttt{membrane}-dataset is gedefinieerd op een L-vormig domein, waarbij de afgeleide heel groot is voor de punten dicht bij de rand. Veeltermen zijn geen goede keuze voor het benaderen van dit soort niet-gladde functies, en dit leidt tot oscillaties aan de randen van het domein wat te zien is op Figuur \ref{fig:opgave5membrane}.
+Figuur \ref{fig:opgave5exp} en Figuur \ref{fig:opgave5membrane} tonen de veeltermoppervlakken en de datapunten. De gladde exponenti"{e}le functie (Dataset 1) wordt goed benaderd. De \texttt{membrane}-functie (Dataset 2) heeft echter grote afgeleiden nabij de randen van het L-vormige domein. Veeltermen zijn slecht voor het benaderen van dergelijke niet-gladde functies, wat leidt tot oscillaties aan de randen.
 \subsection*{Opgave 6}
 \addcontentsline{toc}{subsection}{Opgave 6}
 
@@ -175,9 +177,9 @@ De kost is berekend voor de graden $n=m=d$ gaande van 1 tot en met 20. Figuur \r
 
 Figuur \ref{fig:opgave6kost} toont dat de kostfunctie voor de gladde exponenti\"{e}le functie (Dataset 1) snel en monotoon daalt richting de machineprecisie. Een bivariate veeltermbenadering is voor deze functie dus een geschikte benaderingsmethode. 
 
-Voor de \texttt{membrane}-functie (Dataset 2) stagneert de kostfunctie echter op een relatief hoge fout. Zelfs bij het verhogen van de graad tot $d=20$ neemt de fout nog nauwelijks af. Dit bevestigt de oscillatieverschijnselen in \hyperref[sub:opgave1]{Opgave 5}. Zoals daar reeds uitgelegd is, is een veelterm niet geschikt om deze functie te benaderen vanwege het feit dat de eerste afgeleide heel groot is op de rand van het L-vormig domein. Het verhogen van de graad helpt dan niet om de fout te verkleinen, maar maakt de oscillaties erger over de rest van het domein.
+Voor de \texttt{membrane}-functie (Dataset 2) stagneert de kostfunctie echter op een relatief hoge fout. Zelfs bij het verhogen van de graad tot $d=20$ neemt de fout nog nauwelijks af. Dit bevestigt de oscillaties in \hyperref[sub:opgave1]{Opgave 5}. Zoals daar reeds uitgelegd is, is een veelterm niet geschikt om deze functie te benaderen vanwege het feit dat de eerste afgeleide groot is op de rand van het L-vormig domein. Het verhogen van de graad helpt dan niet om de fout te verkleinen, maar maakt de oscillaties erger over de rest van het domein.
 
-Om ten slotte de \texttt{membrane}-functie beter te benaderen, kunnen er tensorproduct-splinefuncties gebruikt worden. Voor twee dimensies en bv. $k=3$, zijn dit dan bikubische splines. Deze kunnen geschreven worden als een lineaire combinatie van de kruisproducten van $1D$-splines. Aangezien splines slechts in een aantal deelintervallen verschillen van $0$, is de invloed van elke coëfficiënt lokaal en zorgen de punten op de rand van het L-vormig domein niet meer voor benaderingsfouten in de rest van het domein.
+Om ten slotte de \texttt{membrane}-functie beter te benaderen, kunnen er tensorproduct-splinefuncties gebruikt worden. Voor twee dimensies en bv. $k=3$, zijn dit dan bikubische splines. Deze kunnen geschreven worden als een lineaire combinatie van de tensorproducten van 1D-splines. Aangezien splines slechts in een aantal deelintervallen verschillend zijn van nul, is de invloed van elke coëfficiënt lokaal en zorgen de punten op de rand van het L-vormig domein niet meer voor benaderingsfouten in de rest van het domein.
 \subsection*{Opgave 7}
 \addcontentsline{toc}{subsection}{Opgave 7}
 Figuur \ref{fig:opgave7_3Dmatterhorn} toont de 3D-weergave van de Matterhorn-data en de berekende veeltermbenadering van graad $n = m = 25$. Vervolgens geven Figuur \ref{fig:opgave7bovenaanzicht} en Figuur \ref{fig:opgave7contour} respectievelijk het bovenaanzicht en de contourplots. In de buurt van de plaatsen waar er steile flanken zijn, is de benadering slechter. Bovendien worden de ruwe overgangen  zachter. 
@@ -308,7 +310,7 @@ Voor deze matrixstructuur is een \textbf{sparse Householder-QR-factorisatie} een
 
 In de praktijk hebben B-splines duidelijke voordelen ten opzichte van afgeknotte machtsfuncties als basis voor splinebenadering.
 
-Ten eerste hebben B-splines \emph{compacte lokale steun}: elke basisfunctie is slechts niet nul op een beperkt aantal opeenvolgende knoopintervallen. Daardoor veroorzaakt een lokale wijziging van een coëfficiënt enkel een lokale wijziging van de benadering. Afgeknotte machtsfuncties \((x-\tau)_+^p\) zijn weliswaar afgeknot, maar binnen het domein \([0,1]\) zijn ze enkel actief op \([\tau,1]\). Hun invloed is dus minder lokaal en strekt zich typisch over een groter deel van het domein uit, wat het moeilijker maakt om de benadering lokaal te controleren.
+Ten eerste hebben B-splines \emph{compacte lokale steun}: elke basisfunctie is slechts verschillend van nul op een beperkt aantal opeenvolgende knoopintervallen. Daardoor veroorzaakt een lokale wijziging van een coëfficiënt enkel een lokale wijziging van de benadering. Afgeknotte machtsfuncties \((x-\tau)_+^p\) zijn weliswaar afgeknot, maar binnen het domein \([0,1]\) zijn ze enkel actief op \([\tau,1]\). Hun invloed is dus minder lokaal en strekt zich typisch over een groter deel van het domein uit, wat het moeilijker maakt om de benadering lokaal te controleren.
 
 Ten tweede is de numerieke conditionering van B-splinebases doorgaans aanzienlijk beter. De bijhorende stelsels zijn daardoor stabieler op te lossen, terwijl bases met afgeknotte machtsfuncties sneller slecht geconditioneerd raken, vooral bij hogere graad of wanneer knopen dichter op elkaar liggen.
 
