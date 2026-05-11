@@ -1,0 +1,50 @@
+Starting 2(j) computation: 19 N-values, 50 samples each, n=3
+Total LOOCV calls: ~199500
+
+Processing N=30 (1/19)... mean=0.0940, var=0.006244
+Processing N=50 (2/19)... mean=0.0996, var=0.003061
+Processing N=70 (3/19)... mean=0.0911, var=0.001432
+Processing N=90 (4/19)... mean=0.0938, var=0.001220
+Processing N=110 (5/19)... mean=0.0945, var=0.000961
+Processing N=130 (6/19)... mean=0.0948, var=0.000991
+Processing N=150 (7/19)... mean=0.0955, var=0.000452
+Processing N=170 (8/19)... mean=0.0939, var=0.000367
+Processing N=190 (9/19)... mean=0.0911, var=0.000789
+Processing N=210 (10/19)... mean=0.0937, var=0.000381
+Processing N=230 (11/19)... mean=0.0876, var=0.000307
+Processing N=250 (12/19)... mean=0.0919, var=0.000338
+Processing N=270 (13/19)... mean=0.0874, var=0.000305
+Processing N=290 (14/19)... mean=0.0868, var=0.000245
+Processing N=310 (15/19)... mean=0.0853, var=0.000181
+Processing N=330 (16/19)... mean=0.0899, var=0.000248
+Processing N=350 (17/19)... mean=0.0855, var=0.000267
+Processing N=370 (18/19)... mean=0.0857, var=0.000166
+Processing N=390 (19/19)... mean=0.0839, var=0.000189
+
+Total computation time: 2222.4 seconds
+
+Figure 1 saved: opgave2j_mean_cv.{eps,png}
+Figure 2 saved: opgave2j_var_cv.{eps,png}
+
+=== Summary Statistics ===
+N		Mean CV_LOO	Var CV_LOO
+---		-----------	---------
+30		0.094000	0.00624444
+50		0.099600	0.00306106
+70		0.091143	0.00143182
+90		0.093778	0.00122026
+110		0.094545	0.00096138
+130		0.094769	0.00099128
+150		0.095467	0.00045250
+170		0.093882	0.00036715
+190		0.091053	0.00078947
+210		0.093714	0.00038080
+230		0.087565	0.00030709
+250		0.091920	0.00033795
+270		0.087407	0.00030458
+290		0.086759	0.00024527
+310		0.085290	0.00018143
+330		0.089879	0.00024798
+350		0.085543	0.00026736
+370		0.085730	0.00016608
+390		0.083897	0.00018893

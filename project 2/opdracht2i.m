@@ -1,5 +1,5 @@
 % OPDRACHT 2I
-% Herhaal 10-fold cross-validatie vijf keer na het schudden van de data
+% Herhaal 10-fold cross-validatie vijf keer na data te schudden
 
 clearvars -except quickMode; clc; close all;
 
