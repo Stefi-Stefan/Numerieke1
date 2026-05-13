@@ -18,7 +18,7 @@ if mod(N, 2) ~= 0
 end
 
 % reproduceerbare random split
-rng(1, 'twister');
+rng(2, 'twister');
 perm = randperm(N);
 nTrain = N/2;
 idxTr = perm(1:nTrain);

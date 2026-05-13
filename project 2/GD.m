@@ -32,7 +32,7 @@ step = 0;
 for k = 1:max_iter
     g = Dfunc(x);
 
-    % Stop bij kleine gradiëntnorm.
+    % Stop bij kleine gradiëntnorm
     if norm(g, 2) <= tol
         step = k - 1;
         return;
@@ -42,7 +42,7 @@ for k = 1:max_iter
     fx = func(x);
     g2 = g(:).' * g(:);
 
-    % Backtracking op basis van Armijo-voorwaarde.
+    % Backtracking op basis van Armijo-voorwaarde
     while func(x - alpha * g) > fx - armijo_c * alpha * g2
         alpha = backtrack_rho * alpha;
 
