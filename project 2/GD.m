@@ -1,4 +1,4 @@
-function [x, step] = GD(func, Dfunc, x0, step_size, tol, max_iter, gamma, q)
+function [x, step] = GD(func, Dfunc, x0, step_size, eps, max_iter, gamma, q)
 %GD  Gradient Descent met backtracking line search
 %   [x, step] = GD(func, Dfunc, x0, ...)
 %   - x: de oplossing
@@ -10,20 +10,20 @@ function [x, step] = GD(func, Dfunc, x0, step_size, tol, max_iter, gamma, q)
 %
 %   Optionele parameters (met defaults):
 %   step_size     initiële stapgrootte (default 1)
-%   tol           tolerantie voor stopcriteria (default 1e-6)
+%   eps           tolerantie voor stopcriteria (default 1e-6)
 %   max_iter      maximum aantal iteraties (default 5000)
 %   gamma      Armijo-parameter gamma in (0,1) (default 1e-4)
-%   q reductiefactor q in (0,1) (default 0.5)
+%   q reductiefactor in (0,1) (default 0.5)
 
 if nargin == 3
     step_size = 1;
-    tol = 1e-6;
+    eps = 1e-6;
     max_iter = 5000;
     gamma = 1e-4;
     q = 0.5;
 else
     if nargin < 4 || isempty(step_size), step_size = 1; end
-    if nargin < 5 || isempty(tol), tol = 1e-6; end
+    if nargin < 5 || isempty(eps), eps = 1e-6; end
     if nargin < 6 || isempty(max_iter), max_iter = 5000; end
     if nargin < 7 || isempty(gamma), gamma = 1e-4; end
     if nargin < 8 || isempty(q), q = 0.5; end
@@ -37,7 +37,7 @@ for k = 1:max_iter
 
     % stoppen als 2-norm vd gradient kleiner is dan tolerantie,
     % dan is gradient heel klein en ongeveer lokaal minimum bereikt
-    if norm(g, 2) <= tol
+    if norm(g, 2) <= eps
         step = k - 1;
         return;
     end
@@ -63,7 +63,7 @@ for k = 1:max_iter
 
     x_new = x - alpha * g;
     % stopcriterium, bij kleine relatieve verandering van het iteratiepunt stoppen
-    if norm(x_new - x, 2) <= tol * (1 + norm(x, 2))
+    if norm(x_new - x, 2) <= eps * (1 + norm(x, 2))
         x = x_new;
         step = k;
         return;
