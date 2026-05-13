@@ -1,5 +1,4 @@
 \chapter{Arnoldi-iteraties voor eigenwaarden-benadering}
-In dit deel worden de theoretische eigenschappen van de Arnoldi-iteratie onderzocht voor de benadering van eigenwaarden en eigenvectoren. De analyse focust op de structuur van Krylovruimten, invariantie-eigenschappen en convergentiegedrag.
 
 \subsection*{Opgave 1(a)}\label{sub:opg1a}
 \addcontentsline{toc}{subsection}{Opgave 1(a)}
@@ -7,28 +6,25 @@ In dit deel worden de theoretische eigenschappen van de Arnoldi-iteratie onderzo
 \textbf{Gegeven:} Voor een bepaalde iteratie $j$ is de norm van de georthogonaliseerde vector $\tilde v_j$ nul.
 
 \begin{enumerate}
-    \item Voor een niet-triviale Arnoldi-start geldt $1\leq j\leq m$. De ondergrens $j=1$ wordt bereikt wanneer $b$ een eigenvector van $A$ is (dan is $Ab\in\mathrm{span}\{b\}$ en treedt onmiddellijke breakdown op). De bovengrens wordt bereikt wanneer $b$ een cyclische vector is, d.w.z. wanneer $\dim K_m(A,b)=m$ en geen eerdere breakdown optreedt.
+    \item Voor een niet-triviale Arnoldi-start geldt $1\leq j\leq m$ met $m$ de orde van $A$. De ondergrens $j=1$ wordt bereikt wanneer $b$ een eigenvector van $A$ is . Dan geldt $Aq_1=\lambda_1q_1=\lambda_1\frac{b}{||b||_2}\in\mathrm{span}\{b\}$ en is de component die hier loodrecht op staat, de nulvector. De bovengrens $j=m$ wordt bereikt wanneer alle eigenwaarden van $A$ verschillend zijn, en $b$ componenten heeft volgens alle eigenvectoren, waardoor $\dim \mathcal{K}_m(A,b)=m$.
 
-    \item Uit $\|\tilde v_j\|=0$ volgt $Aq_j\in K_j$. Voor $i<j$ geldt bovendien $Aq_i\in K_{i+1}\subseteq K_j$. Bijgevolg wordt elke basisvector van $K_j=\mathrm{span}\{q_1,\ldots,q_j\}$ door $A$ opnieuw in $K_j$ afgebeeld, dus $AK_j\subseteq K_j$.
 
-    \item $A K_j \subseteq K_j$ geldt precies wanneer in iteratie $j$ geen nieuwe Krylovrichting ontstaat, equivalent met $\|\tilde v_j\|=0$. Equivalent: de minimale veelterm van het paar $(A,b)$ heeft graad ten hoogste $j$.
+    \item Uit $\|\tilde v_j\|=0$ volgt $Aq_j\in \mathcal{K}_j$. Voor alle $i<j$ geldt bovendien $Aq_i\in \mathcal{K}_{i+1}\subseteq \mathcal{K}_j$. Bijgevolg wordt elke basisvector van $\mathcal{K}_j=\mathrm{span}\{q_1,\ldots,q_j\}$ door $A$ opnieuw in $\mathcal{K}_j$ afgebeeld, dus $A\mathcal{K}_j\subseteq \mathcal{K}_j$ en dus is $\mathcal{K}_j$ een invariante deelruimte van $A$. 
 
-    \item Omdat $Aq_j\in K_j$, geldt $A^\ell b\in K_j$ voor alle $\ell\geq j-1$. Er ontstaan dus geen nieuwe lineair onafhankelijke richtingen meer, zodat de geneste Krylovketen vanaf index $j$ stationair wordt:
+    \item De vorige deelvraag toonde dat  $A\mathcal{K}_j\subseteq \mathcal{K}_j$. Het strikte geval $A\mathcal{K}_j\subset \mathcal{K}_j$ geldt enkel als $A$ een eigenwaarde $0$ heeft wiens eigenvector behoort tot $\mathcal{K}_j$. Dan wordt namelijk een niet-nulvector door $A$ afgebeeld op de nulvector, waardoor $\dim A\mathcal{K}_j < \dim \mathcal{K}_j$.
+
+    \item Omdat $A^{j-1}b \in \mathcal{K}_j$ en $A\mathcal{K}_j \subseteq \mathcal{K}_j$, volgt dat $A(A^{j-1}b) = A^j b \in \mathcal{K}_j$. Bijgevolg is $\mathcal{K}_j = \mathcal{K}_{j+1}$. Via inductie geldt dit ook voor de volgende machten:
     \[
     K_j=K_{j+1}=K_{j+2}=\cdots.
     \]
 
-    \item Met $Q_j=[q_1,\ldots,q_j]$ en invariantie van $K_j$ geldt
-    \[
-    AQ_j=Q_jH_j,\qquad H_j=Q_j^\top A Q_j.
-    \]
-    Dus $H_j$ is de matrixrepresentatie van de beperking van $A$ tot $K_j$, genoteerd als $A\vert_{K_j}$. Elke eigenwaarde van $H_j$ is dus een eigenwaarde van de operator $A$ op die invariante deelruimte, en daardoor noodzakelijk ook een eigenwaarde van $A$ zelf. Bijgevolg geldt $\sigma(H_j)\subseteq\sigma(A)$.
+    \item Met $Q_j=[q_1,\ldots,q_j]$ en invariantie van $\mathcal{K}_j$ geldt dat $AQ_j=Q_jH_j$. Stel dat $x$ een willekeurige eigenvector is van $H_j$ met eigenwaarde $\lambda$, dus $H_j x = \lambda x$. Beide kanten links vermenigvuldigen met $Q_j$ geeft $Q_j H_j x = \lambda Q_j x$. Door $AQ_j$ te substitueren door $Q_jH_j$ volgt dat $AQ_j x = \lambda Q_j x \iff A(Q_j x) = \lambda (Q_j x)$ . Aangezien $Q_j$ orthogonaal is en $x \neq 0$,  is $v = Q_j x$ niet de nulvector. Daaruit volgt dan dat $\lambda$ een eigenwaarde is van $A$ met eigenvector $v$. Aangezien $x$ een willekeurige eigenvector van $H_j$ was, zijn bijgevolg alle eigenwaarden van $H_j$ en $A$ dezelfde.
 
     \item Omdat $K_j$ invariant is onder $A$, blijft elke vector uit $K_j$ na toepassing van $A$ in $K_j$. Daarom kan $A$ op $K_j$ bekeken worden als
     \[
     A\vert_{K_j}:K_j\to K_j.
     \]
-    Verder geldt $\det(A)\neq 0$, dus $A$ is inverteerbaar en in het bijzonder injectief. Die injectiviteit blijft behouden op de deelruimte $K_j$, zodat $A\vert_{K_j}$ injectief is. Nu hebben domein en codomein van $A\vert_{K_j}$ dezelfde eindige dimensie; daarom is een injectieve lineaire afbeelding automatisch ook surjectief. Dus $A\vert_{K_j}$ is bijectief.
+    Verder geldt $\det(A)\neq 0$, dus $A$ is inverteerbaar en in het bijzonder injectief. Die injectiviteit blijft behouden op de deelruimte $K_j$, zodat $A\vert_{K_j}$ injectief is. Nu hebben domein en codomein van $A\vert_{K_j}$ dezelfde eindige dimensie, daarom is de injectieve lineaire afbeelding automatisch ook surjectief. Dus $A\vert_{K_j}$ is bijectief.
 
     Omdat $b\in K_j$ en $A\vert_{K_j}$ bijectief is, bestaat er precies één $x\in K_j$ met
     \[
@@ -40,19 +36,16 @@ In dit deel worden de theoretische eigenschappen van de Arnoldi-iteratie onderzo
 
 \subsection*{Opgave 1(b)}\label{sub:opg1b}
 \addcontentsline{toc}{subsection}{Opgave 1(b)}
-Toon aan dat $K_m(A,b)=K_{m+1}(A,b)$. Wat kun je dan zeggen over de convergentie van de Arnoldi-iteratie?
-
-
-Omdat $A\in\mathbb{R}^{m\times m}$, geldt $K_m(A,b)\subseteq\mathbb{R}^m$ en dus $\dim K_m(A,b)\le m$. Verder is
+Omdat $A\in\mathbb{R}^{m\times m}$, geldt $\mathcal{K}_j(A,b)\subseteq\mathbb{R}^m$ en dus $\dim \mathcal{K}_j(A,b)\le m$. Verder is
 \[
-K_{m+1}(A,b)=K_m(A,b)+\mathrm{span}\{A^m b\}.
+\mathcal{K}_{j+1}(A,b)=\mathcal{K}_j(A,b)+\mathrm{span}\{A^j b\}.
 \]
-De vectoren $b,Ab,\ldots,A^m b$ vormen $m+1$ vectoren in een $m$-dimensionale ruimte en zijn daarom lineair afhankelijk. Bijgevolg ligt $A^m b$ in de span van $b,Ab,\ldots,A^{m-1}b$, zodat
+Bij een bepaalde $j \le m$ zal $A^j b$ lineair afhankelijk zijn van $\{b, Ab, \ldots, A^{j-1} b\}$ en $A^jb\in \mathcal{K}_j$. Vanaf dat punt geldt dan $\mathcal{K}_j = \mathcal{K}_{j+1} = \dots$ . Aangezien $\dim \mathcal{K}_j(A,b)\le m$, is bij de ruimte $\mathcal{K}_m$ die grens altijd bereikt, en bijgevolg is $A^m b$ lineair afhankelijk van $\{b, Ab, \ldots, A^{m-1} b\}$. Daaruit volgt ten slotte:
 \[
-K_{m+1}(A,b)=K_m(A,b).
+\mathcal{K}_{m+1}(A,b)=\mathcal{K}_m(A,b).
 \]
 
-Voor Arnoldi betekent dit dat er uiterlijk in stap $m$ geen nieuwe basisvector meer kan worden toegevoegd ("breakdown"). Vanaf dat iteratiemoment blijft de Krylovruimte onveranderd, dus ook de geprojecteerde Hessenbergmatrix verandert niet meer. Daardoor blijven de Ritz-waarden constant over verdere iteraties. De methode is vanaf dan volledig geconvergeerd binnen $\mathbb{R}^m$.
+Voor Arnoldi betekent dit dat er uiterlijk in stap $m$ geen nieuwe basisvector meer kan worden toegevoegd. Vanaf dat iteratiemoment blijft de Krylovruimte onveranderd, dus ook de geprojecteerde Hessenbergmatrix verandert niet meer. Daardoor blijven de Ritz-waarden constant over verdere iteraties. De methode is vanaf dan volledig geconvergeerd binnen $\mathbb{R}^m$.
 
 
 
@@ -61,28 +54,44 @@ Voor Arnoldi betekent dit dat er uiterlijk in stap $m$ geen nieuwe basisvector m
 \addcontentsline{toc}{subsection}{Opgave 1(c)}
 Beschouw de matrix $A\in\mathbb{R}^{m\times m}$ met
 \[
-a_{i+1,i}=1\ (i=1,\ldots,m-1),\qquad a_{1,m}=1,
+a_{j+1,j}=1 \text{ voor } j=1,\ldots,m-1,\qquad a_{1,m}=1,
 \]
 en alle overige elementen gelijk aan $0$.
 
 \begin{enumerate}
-    \item $A$ is een cyclische permutatiematrix en voldoet aan $A^m=I$. Dus elke eigenwaarde $\lambda$ voldoet aan $\lambda^m=1$, zodat
+    \item $A$ is een cyclische permutatiematrix. Wanneer je namelijk $A$ vermenigvuldigt met een vector $x$, worden de componenten van $x$ cyclisch naar beneden verschoven:
+    \[A \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_m \end{pmatrix} = \begin{pmatrix} x_m \\ x_1 \\ \vdots \\ x_{m-1} \end{pmatrix}
+    \]
+    Dit betekent dat na $m$ keer permuteren, je terug de oorspronkelijke $x$ bekomt, dus $A^m=I$. Stel dat $\lambda$ een eigenwaarde is van $A$, met als eigenvector $v$. Dan geldt: $Av = \lambda v$. Links $m-1$ keer vermenigvuldigen met $A$ geeft: 
+    \[
+    A^mv = A^{m-1}(\lambda v) = \lambda A^{m-2}(Av) = \lambda^2 A^{m-3}(Av) = \ldots = \lambda^{m-2}A(Av) = \lambda^{m-1}(Av) = \lambda^mv
+    \].
+    Aangezien $A^m=I$, volgt dat elke eigenwaarde $\lambda$ voldoet aan $\lambda^m=1$, zodat
     \[
     \lambda_k=e^{2\pi i k/m},\qquad k=0,\ldots,m-1.
     \]
-    Bijhorende (complexe) eigenvectoren kunnen geschreven worden als
+    Stel $v$ de eigenvector horende bij eigenwaarde $\lambda$, dan geldt $Av = \lambda v$. De componenten dan uitschrijven geeft het volgende stelsel:
     \[
-    v^{(k)}=\big(1,\lambda_k,\lambda_k^2,\ldots,\lambda_k^{m-1}\big)^\top.
+    \begin{cases} 
+    v_m = \lambda v_1 \\
+    v_1 = \lambda v_2 \\
+    v_2 = \lambda v_3 \\
+    \vdots \\
+    v_{m-1} = \lambda v_m
+    \end{cases}
     \]
+    Hieruit volgt dat $v_j = \lambda^{-(j-1)} v_1$. Kies bv. $v_1 = 1$. De (complexe) eigenvector $v^{(k)}$ horende bij eigenwaarde $\lambda_k$ kan dan geschreven worden als
+    \[v^{(k)}=\big(1,\lambda_k^{-1},\lambda_k^{-2},\ldots,\lambda_k^{-(m-1)}\big)^\top= \big(1,\bar{\lambda}_k,\bar{\lambda}_k^2,\ldots,\bar{\lambda}_k^{(m-1)}\big)^\top.\]
+    De laatste gelijkheid geldt omdat de eigenwaarden op de eenheidscirkel liggen.
 
 
     \item Voor $b=e_1$ geldt
     \[
-    A^0e_1=e_1,\ A e_1=e_2,\ \ldots,\ A^{j-1}e_1=e_j \quad (j<m).
+    A^0e_1=e_1,\ A e_1=e_2,\ \ldots,\ A^{j-1}e_1=e_j \quad (1\leq j<m).
     \]
     Dus
     \[
-    K_j(A,e_1)=\mathrm{span}\{e_1,e_2,\ldots,e_j\}.
+    \mathcal{K}_j(A,e_1)=\mathrm{span}\{e_1,e_2,\ldots,e_j\}.
     \]
 
     \item Snelle convergentie wordt niet verwacht.
@@ -91,13 +100,13 @@ en alle overige elementen gelijk aan $0$.
 
     Tweede argument: voor $j<m$ is $Q_j$ enkel opgebouwd uit de eerste $j$ standaardbasisvectoren, terwijl een genormaliseerde eigenvector van $A$ zijn massa over alle $m$ co"ordinaten spreidt. De projectie op $\mathrm{span}(Q_j)$ behoudt dan slechts een fractie $j/m$ van de energie. Daarom geldt
     \[
-    \|(I-Q_jQ_j^*)x_i\|_2=\sqrt{1-j/m},
+    \|(I-Q_jQ_j^*)x_i\|_2=\sqrt{1-\frac{j}{m}},
     \]
     zodat de fout voor $j\ll m$ dicht bij $1$ blijft en de convergentie traag is.
 
-    \item Voor deze matrix is Arnoldi principieel geschikt: bij voldoende iteraties levert de methode exacte informatie over het spectrum (uiterlijk na opbouw van de volledige Krylovruimte). Als echter met weinig iteraties al een nauwkeurige benadering verwacht wordt, is de geschiktheid beperkt. De eigenwaarden liggen namelijk gelijkmatig op de eenheidscirkel, waardoor geen uitgesproken spectrale scheiding aanwezig is die snelle stabilisatie van enkele Ritz-waarden ondersteunt.
+    \item Voor deze matrix is Arnoldi principieel geschikt: bij voldoende iteraties levert de methode exacte informatie over het spectrum (uiterlijk na opbouw van de volledige Krylovruimte). Als echter met weinig iteraties al een nauwkeurige benadering verwacht wordt, is de geschiktheid beperkt. De eigenwaarden liggen namelijk uniform op de eenheidscirkel, waardoor geen uitgesproken spectrale scheiding aanwezig is die snelle stabilisatie van enkele Ritz-waarden ondersteunt.
 
-    Samengevat dus geschikt voor volledige spectrumbepaling bij voldoende iteraties; minder geschikt voor snelle partiële spectrumbepaling. Wel blijft de kost per iteratie laag door de zeer schaarse permutatiestructuur van $A$.
+    Samengevat dus geschikt voor volledige spectrumbepaling bij voldoende iteraties; minder geschikt voor snelle partiële spectrumbepaling. Wel blijft de kost per iteratie laag door de zeer ijle permutatiestructuur van $A$.
 
 
 
@@ -107,29 +116,37 @@ en alle overige elementen gelijk aan $0$.
 
 
 \chapter{Classificatie en kruisvalidatie}
-In dit deel wordt een binair classificatieprobleem uitgewerkt. Eerst wordt het model geformuleerd en numeriek opgelost met Gradient Descent. Vervolgens wordt de modelkeuze onderzocht met verschillende vormen van kruisvalidatie. Deze resultaten worden tot slot analyseert in termen van bias-variantie.
+
+
 
 
 \subsection*{Opgave 2(a)}\label{sub:opg2a}
 \addcontentsline{toc}{subsection}{Opgave 2(a)}
-Voor
+De gegeven doelfunctie is
 \[
-J(\beta)=\frac{1}{N}\sum_{i=1}^{N}\log\!\big(1+\exp(-b_i\beta^\top a_i)\big)
+f(\beta)=\frac{1}{N}\sum_{i=1}^{N}\log\!\big(1+\exp(-b_i\beta^\top a_i)\big)
 \]
-met $a_i\in\mathbb{R}^n$ en $b_i\in\{-1,1\}$ is de gradiënt:
+%f miss beter aangezien in andere deelvragen ook gdn wordt
+met $a_i\in\mathbb{R}^n$ en $b_i\in\{-1,1\}$. De gradiënt hiervan is bijgevolg:
 \[
-\nabla J(\beta)= -\frac{1}{N}\sum_{i=1}^{N}\frac{b_i a_i}{1+\exp(b_i\beta^\top a_i)}.
+\nabla f(\beta)= \frac{1}{N}\sum_{i=1}^{N}\frac{\exp(-b_i\beta^\top a_i)}{1+\exp(-b_i\beta^\top a_i)}(-b_ia_i)
+= -\frac{1}{N}\sum_{i=1}^{N}\frac{b_i a_i}{1+\exp(b_i\beta^\top a_i)}.
 \]
 Equivalent in matrixvorm:
-\[
-\nabla J(\beta)= -\frac{1}{N}A^\top\!\left(\frac{b}{1+\exp\!\left(\operatorname{diag}(b)A\beta\right)}\right),
+\[\nabla f(\beta) = -\frac{1}{N} A^\top y,
 \]
-waar de exponent en deling elementgewijs worden geïnterpreteerd.
-
-Indien geen analytisch voorschrift beschikbaar is, kan de gradi"ent numeriek benaderd worden met centrale eindige verschillen:
+met $y\in\mathbb{R}^N$ en
 \[
-\frac{\partial J}{\partial \beta_j}(\beta)\approx
-\frac{J(\beta+h e_j)-J(\beta-h e_j)}{2h}.
+y_i = \frac{b_i}{1 + \exp(b_i \beta^\top a_i)}
+.\]
+
+is $A\in\mathbb{R}^{N\times n}$  de matrix waarin de $N$ inputvectoren $\mathbf{a}_i$ elk als een rij zijn opgeslagen.
+De vector ${b}\in\mathbb{R}^N$ is de kolomvector met de gekende classificatie (1 of -1) voor elk datapunt. 
+
+Indien geen analytisch voorschrift beschikbaar is, kan de gradi"ent numeriek benaderd worden met centrale eindige differenties:
+\[
+\frac{\partial f}{\partial \beta_j}(\beta)\approx
+\frac{f(\beta+h e_j)-f(\beta-h e_j)}{2h}.
 \]
 Deze aanpak is algemeen toepasbaar, maar vereist extra functie-evaluaties en een zorgvuldige keuze van $h$.
 
@@ -137,75 +154,207 @@ Deze aanpak is algemeen toepasbaar, maar vereist extra functie-evaluaties en een
 \subsection*{Opgave 2(b)}\label{sub:opg2b}
 \addcontentsline{toc}{subsection}{Opgave 2(b)}
 
-De implementatie is uitgewerkt in \texttt{GD.m}. De iteratie is
+De implementatie van steilste afdaling is uitgewerkt in \texttt{GD.m}. De parameter-update in iteratie $k$ wordt gegeven door:
 \[
 x_{k+1}=x_k-\alpha_k\nabla f(x_k).
 \]
-Als initiële stapgrootte wordt een vaste waarde gebruikt (default 1), gevolgd door backtracking (Armijo-voorwaarde). Daardoor blijft de methode bruikbaar voor functies met verschillende schaal en kromming, zonder handmatige herafstemming per probleem.
+Als initiële stapgrootte wordt een vaste waarde gebruikt : $\alpha_{\text{init}} = 1$. Zolang niet aan de Armijo-voorwaarde voldaan is, wordt de stapgrootte gereduceerd (backtracking) via $\alpha_k \leftarrow q \alpha_k$. De gebruikte standaardwaarde van de Armijo-parameter is $\gamma = 10^{-4}$ (voor een minimale vereiste daling). Voor de reductiefactor $q$ is 0.5 genomen, dus een halvering. Dit is gekozen omdat de methode dan bruikbaar blijft voor functies met verschillende schaal en kromming, zonder handmatige herafstemming per probleem.
 
-Als stopcriteria worden gecombineerd:
-\[
-\|\nabla f(x_k)\|_2 \leq \varepsilon_g,
-\qquad
-\|x_{k+1}-x_k\|_2 \leq \varepsilon_x\,(1+\|x_k\|_2),
-\] (gradiënt vlak genoeg of stapgrootte te klein) 
-naast een bovengrens op het aantal iteraties. Dit voorkomt zowel vroegtijdig stoppen als oneindig dooritereren.
+Het algoritme maakt gebruik van een maat voor tolerantie $\varepsilon$, met als standaardwaarde $10^{-6}$. Het stopt wanneer aan minstens één van de volgende vier convergentiecriteria is voldaan:
+\begin{enumerate}
+    \item \textbf{Kleine gradiëntnorm (bijna vlak):} $\|\nabla f(x_k)\|_2 \leq \varepsilon$, wat aangeeft dat een (lokaal) stationair punt is bereikt.
+    \item \textbf{Kleine relatieve stapverandering:} $\|x_{k+1} - x_k\|_2 \leq \varepsilon \cdot (1 + \|x_k\|_2)$. Dit detecteert dat verdere iteraties geen betekenisvolle vooruitgang meer boeken.
+    \item \textbf{Machineprecisie:} De stapgrootte in de backtracking-lus wordt extreem klein ($\alpha_k < 10^{-16}$), ingebouwd als veiligheid tegen afrondingsfouten.
+    \item \textbf{Maximum aantal iteraties:} Een bovengrens van standaard $k = 5000$ om oneindige lussen te voorkomen.
+\end{enumerate}
 
-Het aantal convergentiestappen is probleemafhankelijk en wordt beïnvloed door conditionering, startpunt en gekozen parameters. Met backtracking is doorgaans een stabiele daling van de doelfunctie observeerbaar, maar zonder globale line-search-optimaliteit blijft een uniforme a-priori grens op het aantal stappen afwezig.
-
+Het aantal convergentiestappen is probleemafhankelijk en wordt beïnvloed door conditionering (van de lokale Hessiaan van de doelfunctie).  Bij een slecht geconditioneerd probleem wijst de (min)-gradiëntrichting niet direct naar het minimum, wat resulteert in inefficiënt zigzag-gedrag en een grote toename van het aantal iteraties. Het aantal hangt ook af van het startpunt en de gekozen parameters. Met backtracking is doorgaans een stabiele daling van de doelfunctie observeerbaar, maar zonder globale line-search-optimaliteit blijft een uniforme a-priori grens op het aantal stappen afwezig.
 
 \subsection*{Opgave 2(c)}\label{sub:opg2c}
 \addcontentsline{toc}{subsection}{Opgave 2(c)}
-Leg uit hoe model (3) relateert aan model (2).
+Model 2 geeft de kans $p_{\beta}(a)$ dat een vector inputdata $a=(x_1,x_2)$ correspondeert met de classificatie $b$. De operatie op de kansen uit model 3, toepassen op de formule van model 2 geeft:
+\[\log\left(\frac{p_{\beta}(a)}{1-p_{\beta}(a)}\right) = \log\left(\frac{\frac{1}{1 + \text{exp}({-\beta^\top a})}}{1 - \frac{1}{1 + \text{exp}({-\beta^\top a})}}\right) = \log\left(\frac{\frac{1}{1 + \text{exp}({-\beta^\top a})}}{\frac{\text{exp}({-\beta^\top a})}{1 + \text{exp}({-\beta^\top a})}}\right) = \log\left(\frac{1}{\text{exp}({-\beta^\top a})}\right) = \beta^\top a
+\]
+Het resultaat $\beta^{\top}a$ is een lineaire combinatie van de componenten van de inputvector $a$.
+Model 3 geeft vervolgens: 
+\[\log\left( \frac{p_{\beta}(a)}{1-p_{\beta}(a)} \right) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 \cdots + \beta_{2n-1} x_1^n + \beta_{2n} x_2^n = \beta'^\top \Phi(a)
+,\]
+met $\beta' = \beta_0 + \beta_1 + \cdots + \beta_{2n-1} + \beta_{2n}$. Dit is dus equivalent aan model 2, indien de oorspronkelijke inputvector $a = (x_1, x_2)$ getransformeerd wordt naar een vector $\Phi(a)$ die bestaat uit de monomiale veeltermen $1, x_1, x_2, \dots, x_1^n, x_2^n$
+. Dit vormt dus een uitbreiding van de standaard logistische regressie door gebruik te maken van een basisexpansie.
 
 \subsection*{Opgave 2(d)}\label{sub:opg2d}
 \addcontentsline{toc}{subsection}{Opgave 2(d)}
-Bepaal modellen voor $n=0,\ldots,5$ met alle data. Voeg zes figuren toe met:
-\begin{itemize}
-    \item datapunten (klasse $1$ in blauw, klasse $-1$ in rood),
-    \item scheidingsgrens $p=1/2$,
-    \item aantal fout geclassificeerde punten per model.
-\end{itemize}
+De reeds vermelde logistische regressie bepaalt een scheidingswand ($p=1/2)$ tussen de twee groepen data bij classificatie. Figuur \ref{fig:opgave2d_all} geeft deze classificatieresultaten en scheidingswanden voor de monomiale basisuitbreiding van graad $n=0$ tot en met $n=5$. De vorm van deze scheiding is afhankelijk van de graad van de gebruike veelterm.
+Tabel \ref{tab:fouten_2d} geeft vervolgens het aantal verkeerd geclassificeerde punten weer op de totale dataset van 400 punten, per graad $n$, en toont ook het aantal Gradient Descent stappen. In deze opgave werd een limiet van 15000 iteraties gebruikt. Bij $n \geq 4$ stopte het algoritme op deze limiet, wat wijst op een slecht geconditioneerd optimalisatieprobleem bij hogere graden.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2d_n0.eps}
+        \caption{Graad $n=0$ (Constant model, blauw)}
+        \label{fig:n0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2d_n1.eps}
+        \caption{Graad $n=1$ (Lineaire scheiding)}
+        \label{fig:n1}
+    \end{subfigure}
 
+    \vspace{0.4cm}
+
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2d_n2.eps}
+        \caption{Graad $n=2$ (Kwadratische grens)}
+        \label{fig:n2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2d_n3.eps}
+        \caption{Graad $n=3$ (Derdegraads veelterm)}
+        \label{fig:n3}
+    \end{subfigure}
+
+    \vspace{0.4cm}
+
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2d_n4.eps}
+        \caption{Graad $n=4$ (Vierdegraads veelterm)}
+        \label{fig:n4}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2d_n5.eps}
+        \caption{Graad $n=5$ (Vijfdegraads veelterm)}
+        \label{fig:n5}
+    \end{subfigure}
+
+    \caption{Classificatieresultaten en scheidingswanden ($p=1/2$) voor monomiale basisuitbreiding van graad $n=0$ tot en met $n=5$. blauw: datapunten klasse $1$, rood: datapunten klasse $-1$}
+    \label{fig:opgave2d_all}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Classificatiefout en convergentie op de volledige dataset in functie van de graad $n$.}
+    \begin{tabular}{cccl}
+        \toprule
+        \textbf{Graad ($n$)} & \textbf{Fout} & \textbf{GD stappen} & \textbf{Observatie \& Vorm scheidingswand} \\
+        \midrule
+        0 & 181 & 38 & Underfitting, alle punten dezelfde klasse \\
+        1 & 78  & 606 & Lineaire scheiding, onvoldoende flexibiliteit \\
+        2 & 76  & 1793 & Kwadratische grens, iets betere volging van data. \\
+        3 & 42  & 13046 & Grote daling in de fout, flexibele scheiding \\
+        4 & 44  & 15000 & Max iteraties bereikt, flexibele scheiding  \\
+        5 & 37  & 15000 & Max iteraties bereikt, flexibele scheiding  \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:fouten_2d}
+    \begin{flushleft}
+    \end{flushleft}
+\end{table}
 \subsection*{Opgave 2(e)}\label{sub:opg2e}
 \addcontentsline{toc}{subsection}{Opgave 2(e)}
-Maak een figuur van de kruisvalidatiefout in functie van $n$ voor $n=1,\ldots,20$ (random train/test split).
+De dataset is gesplitst in twee even grote maar random groepen. Figuur \ref{fig:opg2e_cv} geeft vervolgens de kruisvalidatiefout(ratio) $CV_n$ (een maat voor de generalisatiefout) weer in functie van de graad $n$ voor $n$ = 1, \ldots, 20. Voor deze opdracht werd ook een limiet van 15000 iteraties gebruikt. Deze fout(ratio) daalt door afname van de bias, maar neemt steeds minder af, tot uiteindelijk het optimum bereikt wordt en de fout ongeveer stabiel blijft.
 
 \subsection*{Opgave 2(f)}\label{sub:opg2f}
 \addcontentsline{toc}{subsection}{Opgave 2(f)}
-Herhaal Opgave 2(e) vijf keer met andere random testverzamelingen.
+De kruisvalidatiefout(ratio) is nog vijf keer berekend, voor telkens andere random datasplits. Figuur \ref{fig:opg2f_cv_herhalingen} geeft de resultaten hiervan weer, analoog aan Figuur \ref{fig:opg2e_cv} maar nu voor elk van de zes datasets. Voor elk van de datasets is er een dalende trend tot waarden van $n$ tussen 8 en 12, afhankelijk van de datasets. Hierna blijft de fout ongeveer stabiel als $n$ toeneemt. Dit komt door een aantal factoren. Opvallend is het grote verschil in grootte van de fout bij eenzelfde waarde van $n$, dit komt door de hoeveelheid willekeurigheid bij deze 50/50 trainingsdata-testdata split.  Bij hoge $n$ gaat overfitting optreden. Bij split 6 is dat al te zien, maar bij sommigen wordt het maximaal aantal iteraties bereikt waardoor er net op tijd wordt voorkomen dat er overfitting optreedt. Het model gaat nooit een hele goede classificatie krijgen voor alle data met deze methode, er is risico op underfitting.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2e_cv_random.eps}
+        \caption{Kruisvalidatiefout $\text{CV}_n$ in functie van graad $n$ voor random 50/50 datasplit.}
+        \label{fig:opg2e_cv}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2f_cv_random_herhalingen.eps}
+        \caption{Vergelijking van 6 onafhankelijke kruisvalidatiefouten(ratios) in functie van graad $n$.}
+        \label{fig:opg2f_cv_herhalingen}
+    \end{subfigure}
+    
+    \caption{Kruisvalidatie resultaten voor verschillende splitsingen bij een random 50/50 datasplit.}
+    \label{fig:gecombineerde_cv_figuren}
+\end{figure}
 
 \subsection*{Opgave 2(g)}\label{sub:opg2g}
 \addcontentsline{toc}{subsection}{Opgave 2(g)}
-Bereken $CV^{\mathrm{LOO}}$ voor $n=1,\ldots,12$ en bespreek welk model de voorkeur heeft.
+Bij LOOCV bevat de trainingset de hele dataset, op één punt na. Dit zorgt ervoor dat er een unbiased schatting gemaakt wordt. LOOCV vereist bovendien dat het model $N$ keer opnieuw wordt gefit, waardoor de rekentijd langer is. Daarom werden de GD-instellingen voor de tolerantie $\varepsilon$ op $ 10^{-5}$(hoger) gezet, en het maximum aantal iteraties op $4000$(lager). Figuur \ref{fig:opg2g_loocv} toont dat de LOOCV-fout scherp daalt bij de overgang van $n=1$ naar $n=2$ en $n=3$, wat bevestigt dat de data een niet-lineaire scheidingswand vereist en bij lage $n$ een goed model vindt dankzij de grote verhouding van trainingsdata t.o.v. testdata. Het absolute minimum wordt bereikt bij graad $n=7$. Bij hogere $n$ is de fout een kleine factor groter, vanwege grotere kans op overfitting.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Figuren/opgave2g_loocv.eps}
+    \caption{LOOCV-fout in functie van graad $n$.}
+    \label{fig:opg2g_loocv}
+\end{figure}
 
 \subsection*{Opgave 2(h)}\label{sub:opg2h}
 \addcontentsline{toc}{subsection}{Opgave 2(h)}
-Implementeer 10-fold cross-validatie en bereken de fout voor $n=1,\ldots,20$.
+Uit Figuur \ref{fig:opgave2h_kfcv10} blijkt dat de 10-voudige kruisvalidatiefout initieel sterk daalt wanneer de graad toeneemt van $n=1$ naar $n=3$, en bereikt een minimum bij $n=11$. Deze is de beste, aangezien bij hogere $n$ er meer iteratiestappen nodig  zijn en de fout niet beter gaat worden.
+\begin{figure}[H]
+    \centering
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2h_kfcv10.eps}
+        \caption{10-voudige kruisvalidatiefout in functie van $n$.}
+        \label{fig:opgave2h_kfcv10}
+    \end{minipage}
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2i_kfcv10_herhalingen.eps}
+        \caption{Vijf onafhankelijke runs van 10-voudige kruisvalidatiefout na schudden.}
+        \label{fig:opgave2i_kfcv10_herhalingen}
+    \end{minipage}
+\end{figure}
 
 \subsection*{Opgave 2(i)}\label{sub:opg2i}
 \addcontentsline{toc}{subsection}{Opgave 2(i)}
-Herhaal Opgave 2(h) vijf keer met geschudde data.
+Ook bij deze opgave is de GD-instelling voor de tolerantie $\varepsilon$ op $ 10^{-5}$ (hoger) gezet, en het maximum aantal iteraties op $4500$ (lager). Figuur \ref{fig:opgave2i_kfcv10_herhalingen} toont de 10-voudige CV-fout waarbij na elke iteratie de dataset is geschud. De curven vallen voor lage $n$ bijna perfect samen en bereiken op hetzelfde moment hun minimum bereiken rond $n=8$. Dit toont aan dat de schatting van de fout stabiel en consistent is en komt omdat elke observatie in de dataset precies één keer als testpunt wordt gebruikt en de variantie kleiner is. Vanaf hoge $n$ stijgt de fout door overfitting, wat hier niet te zien is vanwege het lagere aantal maximale iteraties.
+
 
 \subsection*{Opgave 2(j)}\label{sub:opg2j}
 \addcontentsline{toc}{subsection}{Opgave 2(j)}
-Onderzoek de invloed van datasetgrootte op bias en variantie van de LOOCV-schatter met samples uit \texttt{BigDatasetCV.mat}
+Figuur \ref{fig:opg2j_mean} toont de verwachte waarde (dus ook de bias) van ${CV_3}^{\text{LOO}}$. De fout is eerst groot, en daalt met toenemende datasetgrootte $N$. Dit komt omdat het model verbetert naarmate het op meer data wordt getraind, en bij grote $N$ de extra informatiewaarde van een volgend extra datapunt klein is.
+Figuur \ref{fig:opg2j_var} toont vervolgens de variantie $\text{Var}(\text{$CV_3$}^{\text{LOO}})$. Deze heeft eerst een grote daling en evolueert dan heel snel naar een stabiele waarde. Dit komt omdat bij een laag aantal datasetpunten de ligging van de scheidingswand p = 1/2 gevoeliger is voor de ruis op bepaalde datapunten, wat zorgt  voor een grote variatie in testfouten tussen verschillende samples.
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2j_mean_cv.eps}
+        \caption{Verwachte waarde van de LOOCV-schatter $\mathbb{E}[\text{$CV_3$}^{\text{LOO}}]$ in functie van $N$.}
+        \label{fig:opg2j_mean}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figuren/opgave2j_var_cv.eps}
+        \caption{Steekproefvariantie van de LOOCV-schatter $\text{Var}(\text{$CV_3$}^{\text{LOO}})$ in functie van $N$.}
+        \label{fig:opg2j_var}
+    \end{minipage}
+\end{figure}
 
 \subsection*{Opgave 2(k)}\label{sub:opg2k}
 \addcontentsline{toc}{subsection}{Opgave 2(k)}
-Onderzoek de invloed van $K$ op de bias van $CV^K$ voor $N=400$, $n=3$ en $K=1,\ldots,15$
+
 
 \subsection*{Opgave 2(l)}\label{sub:opg2l}
 \addcontentsline{toc}{subsection}{Opgave 2(l)}
-Vergelijk de bias van de drie methodes (random split, LOOCV, K-fold)
+De resultaten tonen het bekende bias--variance tradeoff effect bij de keuze van het aantal vouwen $K$. Kleine waarden van $K$ (bijvoorbeeld $K=1$, een enkele 50/50 split) geven een ruizige schatter van de generalisatiefout, omdat het resultaat sterk afhangt van de toevallige datasplit. Wanneer $K$ toeneemt, daalt de bias van de schatter doorgaans omdat elk model op een groter deel van de data wordt getraind, maar voor zeer grote $K$ kan de variantie opnieuw toenemen doordat de trainingssets sterk op elkaar lijken. In onze experimenten zien we daarom meestal een stabiel gebied voor matige waarden van $K$; tegelijk neemt de rekentijd toe en wordt de optimalisatie numeriek gevoeliger voor grotere $K$. De praktische conclusie is dus dat een tussenwaarde voor $K$ een goed compromis geeft tussen bias, variantie en rekentijd.
+
 
 \subsection*{Opgave 2(m)}\label{sub:opg2m}
 \addcontentsline{toc}{subsection}{Opgave 2(m)}
-figuur van de variantie voor de berekeningen in Opgave 2(k)
+
 
 \subsection*{Opgave 2(n)}\label{sub:opg2n}
 \addcontentsline{toc}{subsection}{Opgave 2(n)}
-korte eindconclusie rond logistische regressie.
 
 
 
@@ -216,14 +365,14 @@ korte eindconclusie rond logistische regressie.
 
 
 \clearpage
-\chapter{Gebruik van GenAI -> DIT MOET NOG AANGEPAST WORDEN NAAR WAT WIJ GEBRUIKT HEBBEN!!!}
+\chapter{Gebruik van GenAI}
 
 Tijdens de uitwerking van dit project werd in beperkte mate gebruikgemaakt van generatieve artificiële intelligentie (GenAI), voornamelijk ter ondersteuning van verslagstructuur, formulering en syntaxadvies. AI werd uitsluitend gebruikt als hulpmiddel, waarbij alle gegenereerde output kritisch geëvalueerd en handmatig aangepast werd door het projectteam. De uiteindelijke inhoud en formuleringen zijn volledig bepaald door de auteurs van dit verslag.
 
 De voornaamste gebruikte GenAI-modellen waren:
 \begin{itemize}
     \item \textbf{Copilot} – gebruikt om geschreven teksten van het verslag na te kijken en verbeteren maar vooral hulp bij \textsc{Matlab}- en \LaTeX{}-syntax te bieden, zowel als suggesties voor te stellen voor foutopsporing tijdens debugging van \textsc{Matlab}-code.
-    \item \textbf{ChatGPT} – incidenteel geraadpleegd (aanvullend ingezet) vooral voor verwoording en algemene formulering. Daarnaast voor ook voor opzoekwerk en eventuele extra uitleg rondom de onderwerpen van de opgave.
+    \item \textbf{ChatGPT} – incidenteel geraadpleegd (aanvullend ingezet) vooral voor verwoording en algemene formulering. Daarnaast voor ook voor opzoekwerk en eventuele extra uitleg rondom de onderwerpen van de opgave, of bij het helpen met de \LaTeX{}-syntax van moeilijke vergelijkingen.
 \end{itemize}
 
 Onderstaande tabel \ref{tabel_GenAI} geeft een overzicht van de domeinen waarin GenAI al dan niet werd gebruikt:
